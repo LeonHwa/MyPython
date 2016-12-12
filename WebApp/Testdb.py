@@ -9,10 +9,8 @@ from  Models import  User,Blog,Comment
 
 
 async def test(loop):
-    await  orm3.create_pool(user ='www-data', password='www-data', db='db',loop = loop)
-
-    u = User(name='Test', email='test@example.com', passwd='1234567890', image='about:blank')
-
+    await  orm3.create_pool(user ='www-data', password='www-data', db='awesome',loop = loop)
+    u = User(name='Test4', email='test4@example.com', passwd='1234567890', image='about:blank')
     await  u.save()
 
 if __name__ == '__main__':
