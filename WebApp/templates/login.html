@@ -33,22 +33,28 @@ $(function () {
                 event.preventDefault();
                 var $form = $('#fander');
                 if (! this.name.trim()) {
+                    alert('请输入名字');
                     return $form.showFormError('请输入名字');
                 }
                 if (! validateEmail(this.email.trim().toLowerCase())) {
+                     alert('请输入正确的Email地址');
+                    document.getElementById("emailAddressDiv").className="form-group has-error has-feedback";
                     return $form.showFormError('请输入正确的Email地址');
                 }
                 if (this.password1.length < 6) {
+                     alert('口令长度至少为6个字符');
                     return $form.showFormError('口令长度至少为6个字符');
                 }
                 if (this.password1 !== this.password2) {
+                    alert('两次输入的口令不一致');
                     return $form.showFormError('两次输入的口令不一致');
                 }
+
                 var email = this.email.trim().toLowerCase();
                 $form.postJSON('/api/users', {
                     name: this.name.trim(),
                     email: email,
-                    passwd: this.password1
+                    passwd: CryptoJS.SHA1(email + ':' + this.password1).toString()
                 }, function (err, r) {
                     if (err) {
                         return $form.showFormError(err);
@@ -68,16 +74,15 @@ $(function () {
 <div  id="containner" >
     <div>
         <h1 style="font-size: 40px">欢迎注册!</h1>
-
     </div>
-   <form role="form">
+   <form id="fander"  role="form">
       <div id="allInput" >
        <div class="form-group">
            <label for="name">名字</label>
            <input  class="form-control" id="name" v-model = "name">
 
        </div>
-       <div class="form-group">
+       <div class="form-group" id="emailAddressDiv">
            <label for="emailAddress" >邮箱</label>
            <input type="email" class="form-control" id="emailAddress" v-model="email">
        </div>
@@ -90,7 +95,7 @@ $(function () {
            <input type="password" class="form-control" id="secondPassword" v-model="password2">
        </div>
        <div class="form-group">
-         <button v-on:click="submit" id="fander" type="submit" class="btn btn-success" style="margin-top: 20px" >注册</button>
+         <button v-on:click="submit" type="submit" class="btn btn-success" style="margin-top: 20px" >注册</button>
        </div>
      </div>
    </form>

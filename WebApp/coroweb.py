@@ -26,7 +26,7 @@ def post(path):
     def decorator(func):
         @functools.wraps(func) #似的 func.__name__的时候 是本来fuc的名字  而不是decorator
         def wrapper(*args,**kw):
-            return  func(*args,*kw)
+            return  func(*args,**kw)
         #函数相当于一个类 所以可以给一个类添加属性为__method__和__route__  方便后面标记和识别该方法
         wrapper.__method__ = 'POST'
         wrapper.__route__ = path
@@ -40,7 +40,7 @@ def get(path):
     def decorator(func):
         @functools.wraps(func) #似的 func.__name__的时候 是本来fuc的名字  而不是decorator
         def wrapper(*args,**kw):
-            return  func(*args,*kw)
+            return  func(*args,**kw)
         #函数相当于一个类 所以可以给一个类添加属性为__method__和__route__  方便后面标记和识别该方法
         wrapper.__method__ = 'GET'
         wrapper.__route__ = path
