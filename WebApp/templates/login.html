@@ -1,0 +1,98 @@
+{% extends '__base__.html' %}
+
+{% block title %}登录{% endblock%}
+
+{% block beforehead%}
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/static/bootStrap/css/bootstrap.min.css">
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="/static/bootStrap/css/bootstrap-theme.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/js/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootStrap/js/bootstrap.min.js"></script>
+    <!--自定义css-->
+    <link rel="stylesheet" href="/static/css/MyRegister.css">
+    <script src="/static/js/vue.js"></script>
+   <script>
+function validateEmail(email) {
+    var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
+    return re.test(email.toLowerCase());
+}
+$(function () {
+    var vm = new Vue({
+        el: '#fander',
+        data: {
+            name: '',
+            email: '',
+            password1: '',
+            password2: ''
+        },
+        methods: {
+            submit: function (event) {
+                event.preventDefault();
+                var $form = $('#fander');
+                if (! this.name.trim()) {
+                    return $form.showFormError('请输入名字');
+                }
+                if (! validateEmail(this.email.trim().toLowerCase())) {
+                    return $form.showFormError('请输入正确的Email地址');
+                }
+                if (this.password1.length < 6) {
+                    return $form.showFormError('口令长度至少为6个字符');
+                }
+                if (this.password1 !== this.password2) {
+                    return $form.showFormError('两次输入的口令不一致');
+                }
+                var email = this.email.trim().toLowerCase();
+                $form.postJSON('/api/users', {
+                    name: this.name.trim(),
+                    email: email,
+                    passwd: this.password1
+                }, function (err, r) {
+                    if (err) {
+                        return $form.showFormError(err);
+                    }
+                    return location.assign('/');
+                });
+            }
+        }
+    });
+    $('#fander').show();
+});
+</script>
+{% endblock %}
+
+{% block content%}
+
+<div  id="containner" >
+    <div>
+        <h1 style="font-size: 40px">欢迎注册!</h1>
+
+    </div>
+   <form role="form">
+      <div id="allInput" >
+       <div class="form-group">
+           <label for="name">名字</label>
+           <input  class="form-control" id="name" v-model = "name">
+
+       </div>
+       <div class="form-group">
+           <label for="emailAddress" >邮箱</label>
+           <input type="email" class="form-control" id="emailAddress" v-model="email">
+       </div>
+       <div class="form-group">
+           <label for="firstPassword" >输入口令</label>
+           <input type="password" class="form-control" id="firstPassword" v-model="password1">
+       </div>
+       <div class="form-group">
+           <label for="secondPassword" >重复口令</label>
+           <input type="password" class="form-control" id="secondPassword" v-model="password2">
+       </div>
+       <div class="form-group">
+         <button v-on:click="submit" id="fander" type="submit" class="btn btn-success" style="margin-top: 20px" >注册</button>
+       </div>
+     </div>
+   </form>
+</div>
+{% endblock %}
