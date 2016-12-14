@@ -91,7 +91,7 @@ class IntegerField(Field):
         super().__init__(name,column_type,primary_key,default)
 
 class BooleanField(Field):
-    def __init__(self,name = None,column_type = 'boolean',primary_key = False,default = None):
+    def __init__(self,name = None,column_type = 'boolean',primary_key = False,default = False):
         super().__init__(name,column_type,primary_key,default)
 
 class FloatField(Field):
@@ -137,10 +137,12 @@ class ModelMetaclass(type):
         attrs['__table__'] = tableName
 
         #sql语句
-        attrs['__select__'] = 'select `%s`,%s from `%s`' % (primarykey,','.join(escaped_field),tableName)
-        attrs['__insert__'] = 'insert into `%s` (`%s`,%s) values(%s)' % (tableName,','.join(fields),primarykey,create_args_string(len(escaped_field) + 1))
-        attrs['__update__'] = 'update `%s` where `%s` = ?' % (tableName,primarykey)
-        attrs['__delete__'] = 'delete from `%s` where `%s` = ?' % (tableName,primarykey)
+        attrs['__select__'] = 'select `%s`, %s from `%s`' % (primarykey, ', '.join(escaped_field), tableName)
+        attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (
+        tableName, ', '.join(escaped_field), primarykey, create_args_string(len(escaped_field) + 1))
+        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (
+        tableName, ', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primarykey)
+        attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName, primarykey)
         return type.__new__(cls,name,bases,attrs)
 def create_args_string(num):
     L = []
@@ -150,13 +152,17 @@ def create_args_string(num):
 
 
 class Model(dict,metaclass= ModelMetaclass):
-    def __init__(self,**kwargs):
-         super(Model,self).__init__(**kwargs)
+    def __init__(self, **kw):
+        super(Model, self).__init__(**kw)
+
     def __getattr__(self, key):
         try:
-            return  self[key]
+            return self[key]
         except KeyError:
-            return ArithmeticError(r" 'Model' has no attibute %s " % key)
+            raise AttributeError(r"'Model' object has no attribute '%s'" % key)
+
+    def __setattr__(self, key, value):
+        self[key] = value
 
     def getValue(self,key):
         return getattr(self,key,None)
@@ -164,9 +170,9 @@ class Model(dict,metaclass= ModelMetaclass):
     def getValueOrDefault(self,key):
         value = getattr(self,key,None)
         if value is None:#可能之前有 但是删掉了 保存在__mapping__ 里面
-            field = self.__mapping._[key]
+            field = self.__mappings__[key]
             if field.default is not None:
-                value =field.default() if callable(field.default()) else field.default
+                value =field.default() if callable(field.default) else field.default
                 logging.debug('using default value %s : %s' % (key,str(value)))
                 setattr(self, key, value)
         return value
@@ -198,7 +204,6 @@ class Model(dict,metaclass= ModelMetaclass):
         rs = await select(' '.join(sql), args)
         return [cls(**r) for r in rs]
 
-    @classmethod
     async def findNumber(cls, selectField, where=None, args=None):
         ' find number by select and where. '
         sql = ['select %s _num_ from `%s`' % (selectField, cls.__table__)]
@@ -223,14 +228,14 @@ class Model(dict,metaclass= ModelMetaclass):
         args.append(self.getValueOrDefault(self.__primary_key__))
         rows = await execute(self.__insert__, args)
         if rows != 1:
-            logging.warn('failed to insert record: affected rows: %s' % rows)
+            logging.warning('failed to insert record: affected rows: %s' % rows)
 
     async def update(self):
         args = list(map(self.getValue, self.__fields__))
         args.append(self.getValue(self.__primary_key__))
         rows = await execute(self.__update__, args)
-        # if rows != 1:
-        # logging.warn('failed to update by primary key: affected rows: %s' % rows)
+        if rows != 1:
+          logging.warning('failed to update by primary key: affected rows: %s' % rows)
 
     async def remove(self):
         args = [self.getValue(self.__primary_key__)]
