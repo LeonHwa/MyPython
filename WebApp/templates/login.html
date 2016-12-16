@@ -1,69 +1,107 @@
 <!DOCTYPE html>
-<html class="uk-height-1-1">
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>登录 - Awesome Python Webapp</title>
-    <link rel="stylesheet" href="/static/css/uikit.min.css">
-    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登陆</title>
     <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/sha1.min.js"></script>
-    <script src="/static/js/uikit.min.js"></script>
-    <script src="/static/js/vue.old.js"></script>
-    <script src="/static/js/awesome.js"></script>
-    <script>
+    <script src="/static/js/jquery.backstretch.js"></script>
 
-$(function() {
-    var vmAuth = new Vue({
-        el: '#vm',
-        data: {
-            email: '',
-            passwd: ''
-        },
-        methods: {
-            submit: function(event) {
-                event.preventDefault();
-                var
-                    $form = $('#vm'),
-                    email = this.email.trim().toLowerCase(),
-                    data = {
-                        email: email,
-                        passwd: CryptoJS.SHA1(email + ':' + this.passwd).toString()
-                    };
-                $form.postJSON('/api/authenticate', data, function(err, result) {
-                    if (! err) {
-                        location.assign('/');
+    <link rel="stylesheet" href="/static/bootStrap/css/bootstrap-theme.css">
+    <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.css">
+    <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/myCSS/myLoginCSS.css">
+    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
+     <script  src="/static/bootStrap/js/bootstrap.js"></script>
+   <!--Vue-->
+
+     <!--<script src="/static/js/vue.common.js"></script>-->
+     <!--<script src="/static/js/vue.runtime.common.js"></script>-->
+     <!--<script src="/static/js/vue.runtime.js"></script>-->
+    <!--<script src="/static/js/vue.runtime.min.js"></script>-->
+       <link rel="stylesheet" href="/static/css/awesome.css" />
+    <script src="/static/js/vue.min.js"></script>
+     <script src="/static/js/vue.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+$(function () {
+            $.backstretch([
+                "/static/img/2.jpg"
+                ,"/static/img/3.jpg"
+                ,"/static/img/1.jpg"
+            ], {duration: 3000, fade: 750});
+
+            var vm = new Vue({
+                el: '#vmm',
+                data:{
+                    email:'',
+                    password:''
+                },
+                methods: {
+                    login: function (event) {
+                        var $form = $('#vmm');
+                        var jqxhr = $.ajax('/api/authenticate', {
+                                  dataType: 'application/json',
+                                  data : {
+                                  email: email,
+                                  passwd: this.passwd==='' ? '' : CryptoJS.SHA1(email + ':' + this.passwd).toString()
+                                  },
+                                  method:'POST'
+
+                            });
                     }
-                });
-            }
-        }
-    });
-});
-
-    </script>
+                }
+            });
+})
+</script>
 </head>
-<body class="uk-height-1-1">
-    <div class="uk-vertical-align uk-text-center uk-height-1-1">
-        <div class="uk-vertical-align-middle" style="width: 320px">
-            <p><a href="/" class="uk-icon-button"><i class="uk-icon-html5"></i></a> <a href="/">Awesome Python Webapp</a></p>
-            <form id="vm" v-on="submit: submit" class="uk-panel uk-panel-box uk-form">
-                <div class="uk-alert uk-alert-danger uk-hidden"></div>
-                <div class="uk-form-row">
-                    <div class="uk-form-icon uk-width-1-1">
-                        <i class="uk-icon-envelope-o"></i>
-                        <input v-model="email" name="email" type="text" placeholder="电子邮件" maxlength="50" class="uk-width-1-1 uk-form-large">
-                    </div>
-                </div>
-                <div class="uk-form-row">
-                    <div class="uk-form-icon uk-width-1-1">
-                        <i class="uk-icon-lock"></i>
-                        <input v-model="passwd" name="passwd" type="password" placeholder="口令" maxlength="50" class="uk-width-1-1 uk-form-large">
-                    </div>
-                </div>
-                <div class="uk-form-row">
-                    <button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large"><i class="uk-icon-sign-in"></i> 登录</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<body>
+ <div class="top-content">
+     <div class="inner-bg">
+         <div class="container">
+           <div class="row">
+             <div class="col-sm-8 col-sm-offset-2  text" >
+                 <h1> <strong>Personal Blog Form</strong> Leon</h1>
+                 <p class="description">
+                 This is a free responsive login form made with Bootstrap. Download it on
+                 <a href="http://azmind.com"><strong>AZD</strong> </a>, customize and use it as you like!
+                 </p>
+             </div>
+           </div>
+
+           <div class="row" >
+                 <div class="col-sm-6 col-sm-offset-3">
+                     <div class="form-box">
+                        <div class="form-top">
+                             <div class="form-top-left">
+                                <h3>Login your site</h3>
+                                <p>Enter your username and password to log on:</p>
+                              </div>
+                              <div class="form-top-right">
+                        			<i class="fa fa-lock"></i>
+                              </div>
+                        </div>
+                        <div class="form-bottom">
+                          <form  id="vmm" role=""   method="post" class="login-form"  >
+                             <div class="form-group">
+                                 <label class="sr-only" for="form-username">Username</label>
+                                 <input v-model = "email" type="text" name="form-username" placeholder="username..." class="form-username form-control" id="form-username">
+                             </div>
+                             <div class="form-group">
+                                 <label class="sr-only" for="form-password">password</label>
+                                 <input v-model = "password" type="password" name="form-password" placeholder="input your passwrd..." class="form-password form-control"
+                                  id="form-password">
+                             </div>
+                              <button  v-on:click="login" type="submit" class="btn"  >Sign in!</button>
+                          </form>
+                         </div>
+                     </div>
+                 </div>
+
+            </div>
+         </div>
+     </div>
+
+ </div>
 </body>
 </html>
