@@ -68,20 +68,18 @@ def user_sigin(request):
         '__template__' :'login.html'
     }
 @post('/api/authenticate')
-async  def authenticate(*,email,pasword):
+async  def authenticate(*,email,passwd):
     if not email:
         raise APIValueError('email', 'Invalid email.')
-    if not pasword:
+    if not passwd:
         raise APIValueError('passwd', 'Invalid password.')
     users = await User.findAll('email=?',[email])
     if len(users) == 0:
         raise APIValueError('email', 'Email not exist.')
     user = users[0]
-    sha1 = hashlib.sha1()
-    sha1.updae(user.id.encode('utf-8'))
-    sha1.updae(b':')
-    sha1.updae(pasword.encode('utf-8'))
-    if user.id != sha1.hexdigest:#验证密码 (uid:password)
+    sha1_passwd = '%s:%s' % (user.id, passwd)
+    sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
+    if user.passwd != sh1_ss:#验证密码 (uid:password)
         raise APIValueError('passwd', 'Invalid password.')
     #设置cookies:
     r  = web.Response()
@@ -89,7 +87,7 @@ async  def authenticate(*,email,pasword):
     user.passwd = '******'
     r.content_type = 'application/json'
     logging.info('授权成功')
-    r.body = json.dump(user,ensure_ascii=False).encode('utf-8')
+    r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
     return r
 
 def user2cookie(user,max_age):
