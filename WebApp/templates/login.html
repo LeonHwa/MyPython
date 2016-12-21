@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/myCSS/myLoginCSS.css">
     <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
      <script  src="/static/bootStrap/js/bootstrap.js"></script>
+     <script  src="/static/js/hashes.js"></script>
    <!--Vue-->
 
      <!--<script src="/static/js/vue.common.js"></script>-->
@@ -40,14 +41,17 @@ $(function () {
                 methods: {
                     login: function (event) {
                         var $form = $('#vmm');
+                        var email = this.email.trim().toLowerCase();
+//                        var psw =  CryptoJS.SHA1('VV' + ':' + 'dd').toString();//这里是请求发送不出的原因
+                        var SHA1 = new Hashes.SHA1;
+                        var psw = SHA1.hex(email + ':' + this.password).toString();
                         var jqxhr = $.ajax('/api/authenticate', {
                                   dataType: 'application/json',
                                   data : {
-                                  email: email,
-                                  passwd: this.passwd==='' ? '' : CryptoJS.SHA1(email + ':' + this.passwd).toString()
+                                    "email":email,
+                                    "passwd":psw
                                   },
                                   method:'POST'
-
                             });
                     }
                 }
@@ -82,7 +86,7 @@ $(function () {
                               </div>
                         </div>
                         <div class="form-bottom">
-                          <form  id="vmm" role=""   method="post" class="login-form"  >
+                          <form  id="vmm" role="form"   method="post" class="login-form"  >
                              <div class="form-group">
                                  <label class="sr-only" for="form-username">Username</label>
                                  <input v-model = "email" type="text" name="form-username" placeholder="username..." class="form-username form-control" id="form-username">

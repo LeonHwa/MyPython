@@ -69,26 +69,33 @@ def user_sigin(request):
     }
 @post('/api/authenticate')
 async  def authenticate(*,email,passwd):
-    if not email:
-        raise APIValueError('email', 'Invalid email.')
-    if not passwd:
-        raise APIValueError('passwd', 'Invalid password.')
-    users = await User.findAll('email=?',[email])
-    if len(users) == 0:
-        raise APIValueError('email', 'Email not exist.')
-    user = users[0]
-    sha1_passwd = '%s:%s' % (user.id, passwd)
-    sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
-    if user.passwd != sh1_ss:#验证密码 (uid:password)
-        raise APIValueError('passwd', 'Invalid password.')
-    #设置cookies:
-    r  = web.Response()
-    r.set_cookie(COOKIE_NAME,user2cookie(user,86400),max_age=86400,httponly=True)
-    user.passwd = '******'
-    r.content_type = 'application/json'
-    logging.info('授权成功')
-    r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
-    return r
+    # logging.info(passwd.encode('utf-8'))
+    # if not email:
+    #     raise APIValueError('email', 'Invalid email.')
+    # if not passwd:
+    #     raise APIValueError('passwd', 'Invalid password.')
+    # users = await User.findAll('email=?',[email])
+    # if len(users) == 0:
+    #     raise APIValueError('email', 'Email not exist.')
+    # user = users[0]
+    # sha1_passwd = '%s:%s' % (user.id, passwd)
+    # sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
+    # logging.info(user.passwd)
+    # logging.info(sh1_ss)
+    # if user.passwd != sh1_ss:#验证密码 (uid:password)
+    #     raise APIValueError('passwd', 'Invalid password.')
+    # #设置cookies:
+    # r  = web.Response()
+    # r.set_cookie(COOKIE_NAME,user2cookie(user,86400),max_age=86400,httponly=True)
+    # user.passwd = '******'
+    # r.content_type = 'application/json'
+    # logging.info('授权成功')
+    # r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
+    # logging.info(r.body)
+    return {
+        '__template__':'hello.html'
+
+    }
 
 def user2cookie(user,max_age):
     expiress = str(int(time.time()) + max_age)

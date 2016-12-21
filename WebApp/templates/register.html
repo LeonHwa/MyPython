@@ -14,6 +14,7 @@
     <!--自定义css-->
     <link rel="stylesheet" href="/static/css/MyRegister.css">
     <script src="/static/js/vue.js"></script>
+<script src="/static/js/hashes.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
    <script>
 function validateEmail(email) {
@@ -52,10 +53,12 @@ $(function () {
                 }
 
                 var email = this.email.trim().toLowerCase();
+                var SHA1 = new Hashes.SHA1;
+                var psw = SHA1.hex(email + ':' + this.password1).toString();
                 $form.postJSON('/api/users', {
                     name: this.name.trim(),
                     email: email,
-                    passwd: CryptoJS.SHA1(email + ':' + this.password1).toString()
+                    passwd: psw
                 }, function (err, r) {
                     if (err) {
                         return $form.showFormError(err);
