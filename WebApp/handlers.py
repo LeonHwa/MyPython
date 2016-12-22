@@ -69,38 +69,35 @@ def user_sigin(request):
     }
 @post('/api/authenticate')
 async  def authenticate(*,email,passwd):
-    # logging.info(passwd.encode('utf-8'))
-    # if not email:
-    #     raise APIValueError('email', 'Invalid email.')
-    # if not passwd:
-    #     raise APIValueError('passwd', 'Invalid password.')
-    # users = await User.findAll('email=?',[email])
-    # if len(users) == 0:
-    #     raise APIValueError('email', 'Email not exist.')
-    # user = users[0]
-    # sha1_passwd = '%s:%s' % (user.id, passwd)
-    # sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
-    # logging.info(user.passwd)
-    # logging.info(sh1_ss)
-    # if user.passwd != sh1_ss:#验证密码 (uid:password)
-    #     raise APIValueError('passwd', 'Invalid password.')
-    # #设置cookies:
-    # r  = web.Response()
-    # r.set_cookie(COOKIE_NAME,user2cookie(user,86400),max_age=86400,httponly=True)
-    # user.passwd = '******'
-    # r.content_type = 'application/json'
-    # logging.info('授权成功')
-    # r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
-    # logging.info(r.body)
-    return {
-        '__template__':'hello.html'
-
-    }
+    logging.info(passwd.encode('utf-8'))
+    if not email:
+        raise APIValueError('email', 'Invalid email.')
+    if not passwd:
+        raise APIValueError('passwd', 'Invalid password.')
+    users = await User.findAll('email=?',[email])
+    if len(users) == 0:
+        raise APIValueError('email', 'Email not exist.')
+    user = users[0]
+    sha1_passwd = '%s:%s' % (user.id, passwd)
+    sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
+    if user.passwd != sh1_ss:#验证密码 (uid:password)
+        raise APIValueError('passwd', 'Invalid password.')
+    #设置cookies:
+    r  = web.Response()
+    r.set_cookie(COOKIE_NAME,user2cookie(user,86400),max_age=86400,httponly=True)
+    logging.info('设置cookie')
+    user.passwd = '******'
+    r.content_type = 'application/json'
+    logging.info('授权成功')
+    r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
+    logging.info(r.body)
+    return  r
 
 def user2cookie(user,max_age):
     expiress = str(int(time.time()) + max_age)
     s = '%s-%s-%s-%s' % (user.id,user.passwd,expiress,_COOKIE_KEY)
     L = [user.id,expiress,hashlib.sha1(s.encode('utf-8')).hexdigest()]
+    logging.info('-'.join(L))
     return '-'.join(L)
 
 @asyncio.coroutine
@@ -129,3 +126,20 @@ def cookie2user(cookie_str):
     except Exception as e:
         logging.exception(e)
         return None
+
+@get('/signout')
+def signout(request):
+    referer = request.headers.get('Referer')
+    r = web.HTTPFound(referer or '/')
+    r.set_cookie(COOKIE_NAME, '-deleted-', max_age=0, httponly=True)
+    logging.info('user signed out.')
+    return r
+
+@get('/navigator')
+def navigator(request):
+    return {
+        '__template__': 'naviTest.html'
+    }
+# @get('/fander')
+# def fander(request):
+#     return dict(fander = 'Leon')

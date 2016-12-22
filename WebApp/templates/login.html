@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="/static/bootStrap/css/bootstrap-theme.css">
     <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.css">
     <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/myCSS/myLoginCSS.css">
+
     <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
      <script  src="/static/bootStrap/js/bootstrap.js"></script>
      <script  src="/static/js/hashes.js"></script>
+
+     <link rel="stylesheet" href="/static/myCSS/myLoginCSS.css">
    <!--Vue-->
 
      <!--<script src="/static/js/vue.common.js"></script>-->
@@ -21,6 +23,7 @@
      <!--<script src="/static/js/vue.runtime.js"></script>-->
     <!--<script src="/static/js/vue.runtime.min.js"></script>-->
        <link rel="stylesheet" href="/static/css/awesome.css" />
+    <script src="/static/js/awesome.js"></script>>
     <script src="/static/js/vue.min.js"></script>
      <script src="/static/js/vue.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,17 +48,27 @@ $(function () {
 //                        var psw =  CryptoJS.SHA1('VV' + ':' + 'dd').toString();//这里是请求发送不出的原因
                         var SHA1 = new Hashes.SHA1;
                         var psw = SHA1.hex(email + ':' + this.password).toString();
-                        var jqxhr = $.ajax('/api/authenticate', {
-                                  dataType: 'application/json',
-                                  data : {
-                                    "email":email,
-                                    "passwd":psw
-                                  },
-                                  method:'POST'
-                            });
+//                        var jqxhr = $.ajax('/api/authenticate', {
+//                                  dataType: 'application/json',
+//                                  data : {
+//                                    "email":email,
+//                                    "passwd":psw
+//                                  },
+//                                  method:'POST'
+//                            });
+                        $form.postJSON('/api/authenticate', {
+                             email: email,
+                             passwd: psw
+                             }, function (err, r) {
+//                                  if (err) {
+//                                      return $form.showFormError(err);
+//                                  }
+                                 return location.assign('/');
+                             });
                     }
                 }
             });
+     $('#vmm').show();
 })
 </script>
 </head>
