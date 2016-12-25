@@ -140,6 +140,12 @@ def navigator(request):
     return {
         '__template__': 'naviTest.html'
     }
+
+@get('/edit')
+def editBlog(request):
+    return {
+            '__template__': 'manage_blog_edit.html'
+    }
 # @get('/fander')
 # def fander(request):
 #     return dict(fander = 'Leon')
