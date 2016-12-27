@@ -65,7 +65,7 @@ async def data_factory(app, handler):
 
 async def response_factory(app, handler):
     async def response(request):
-        logging.info('调用~~~~~~~~~~~~~~~~~data_factory')
+        logging.info('调用~~~~~~~~~~~~~~~~~response_factory')
         logging.info('Response handler...')
         r = await handler(request)
         if isinstance(r, web.StreamResponse):
@@ -116,7 +116,8 @@ async def auth_factory(app, handler):
                        logging.info('set current user: %s' % user.email)
                        request.__user__ = user
                if request.path.startswith('/manager/') and (request.__user__ is None or not request.__user__.admin):
-                       return web.HTTPFound('/signin')
+                       # return web.HTTPFound('/signin')
+                       pass
                return( await handler(request))
   return auth
 def datetime_filter(t):

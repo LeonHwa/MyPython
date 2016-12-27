@@ -341,7 +341,7 @@ function getJSON(url, data, callback) {
 
 function postJSON(url, data, callback) {
     if (arguments.length===2) {
-        callback = data;
+        callback = data; //在post博客那里 如果返回成功  返回的是blog对象本身
         data = {};
     }
     _httpJSON('POST', url, data, callback);

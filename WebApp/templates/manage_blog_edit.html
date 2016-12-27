@@ -16,7 +16,7 @@
                   var $form = $('#vm');
                   $form.postJSON(action,this.$data,function (err,r) {
                       if(!err){
-                          return location.assign('/api/blogs' + r.id)
+                          return location.assign('/api/blogs/' + r.id)
                       }else {
                           $('#error').text(err.message);
                           $('.alert').show();

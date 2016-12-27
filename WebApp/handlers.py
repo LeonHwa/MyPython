@@ -159,7 +159,7 @@ def editBlog(request):
 #保存博客
 @post('/api/blogs')
 async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
-    check_admin(request)
+    # check_admin(request)
     if not blogtitle or not blogtitle.strip():
         raise APIValueError('name', 'name cannot be empty.')
     if not blogsummary or not blogsummary.strip():
@@ -173,3 +173,20 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
 def check_admin(request):
     if request.__user__ is None or not request.__user__.admin:
         raise APIPermissionError()
+
+
+@get('/api/blogs/{id}')
+async def get_blog(request,*,id):
+    blog = await Blog.find(id)
+    # comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
+    # for c in comments:
+    #     c.html_content = text2html(c.content)
+    # blog.html_content = markdown2.markdown(blog.content)
+    # return {
+    #     '__template__': 'blog.html',
+    #     'blog': blog,
+    #     'comments': ''
+    # }
+    logging.info('调用  blog')
+    logging.info(blog)
+    return dict(blog = blog)
