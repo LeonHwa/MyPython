@@ -104,22 +104,21 @@ async def response_factory(app, handler):
         return resp
     return response
 
-@asyncio.coroutine
-async def auth_factory(app,handler):
-   @asyncio.coroutine
-   async def auth(request):
-        logging.info('调用~~~~~~~~~~~~~~~~~auth_factory')
-        logging.info('check user:%s %s' %(request.method,request.path))
-        request.__user__ = None
-        cookie_str =  request.cookies.get(COOKIE_NAME)
-        if cookie_str:
-            logging.info(cookie_str)
-            user = await  cookie2user(cookie_str)
-            if user:
-                logging.info('set current user: %s' % user.email)
-                request.__user__ = user
-        return (await handler(request))
-   return auth
+
+async def auth_factory(app, handler):
+  async def auth(request):
+               logging.info('check user: %s %s' % (request.method, request.path))
+               request.__user__ = None
+               cookie_str = request.cookies.get(COOKIE_NAME)
+               if cookie_str:
+                   user = await cookie2user(cookie_str)
+                   if user:
+                       logging.info('set current user: %s' % user.email)
+                       request.__user__ = user
+               if request.path.startswith('/manager/') and (request.__user__ is None or not request.__user__.admin):
+                       return web.HTTPFound('/signin')
+               return( await handler(request))
+  return auth
 def datetime_filter(t):
     delta = int(time.time() - t)
     if delta < 60:
@@ -142,8 +141,8 @@ async def init(loop):
     init_jinja2(app, filters=dict(datetime=datetime_filter))
     add_routes(app, 'handlers')
     add_static(app)
-    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 10000)
-    logging.info('server started at http://127.0.0.1:10000...')
+    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 8888)
+    logging.info('server started at http://127.0.0.1:8888...')
     return srv
 
 loop = asyncio.get_event_loop()

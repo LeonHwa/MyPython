@@ -230,9 +230,9 @@ $(function () {
                     console.error('Cannot call showFormError() on non-form object.');
                     return;
                 }
-                $form.find('input').removeClass('uk-form-danger');
-                $form.find('select').removeClass('uk-form-danger');
-                $form.find('textarea').removeClass('uk-form-danger');
+                $form.find('input').removeClass('has-warning');
+                $form.find('select').removeClass('has-warning');
+                $form.find('textarea').removeClass('has-warning');
                 if ($alert.length === 0) {
                     console.warn('Cannot find .uk-alert-danger element.');
                     return;
@@ -243,7 +243,7 @@ $(function () {
                         $('html,body').animate({ scrollTop: $alert.offset().top - 60 });
                     }
                     if (fieldName) {
-                        $form.find('[name=' + fieldName + ']').addClass('uk-form-danger');
+                        $form.find('[name=' + fieldName + ']').addClass('has-warning');
                     }
                 }
                 else {

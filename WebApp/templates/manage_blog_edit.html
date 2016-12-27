@@ -4,8 +4,8 @@
  <script src="/static/js/awesome.js"></script>
  <script>
  var
-       ID = '{{ id }}'
-       action = '{{ action }}'
+       ID =  '{{ id }}',
+       action = '{{ action }}';
  function initVM(blog) {
       var vm = new Vue({
           el:'#vm',
@@ -17,6 +17,9 @@
                   $form.postJSON(action,this.$data,function (err,r) {
                       if(!err){
                           return location.assign('/api/blogs' + r.id)
+                      }else {
+                          $('#error').text(err.message);
+                          $('.alert').show();
                       }
                   });
 
@@ -27,6 +30,8 @@
  }
  
  $(function () {
+    $('.alert').hide();
+
     if(ID){
         getJSON('api/blogs' + ID,function (err,blog) {
             if(!err){
@@ -53,6 +58,9 @@
 
 {% block content %}
 <div class="container">
+  <div  class="alert alert-danger col-sm-8 col-sm-offset-2" role="alert">
+   <p id="error"></p>
+  </div>
   <div class="row" >
     <div class="col-sm-8 col-sm-offset-2">
      <div class="from-box">

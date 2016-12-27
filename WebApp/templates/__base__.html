@@ -11,7 +11,7 @@
     <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.css">
     <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
     <link rel="stylesheet"  href="/static/myCSS/style.css">
-
+     <script src="/static/js/awesome.js"></script>
      <script src="/static/js/vue.js"></script>
     {% block beforehead %}<!-- before head  -->{% endblock %}
 </head>
@@ -34,9 +34,9 @@
 
               <ul class="nav navbar-nav navbar-right">
                   {% if __user__ %}
-                   <li><a href="/signout"><span class="glyphicon glyphicon-user"></span></a></li>
+                   <li><a href="/signout"><span class="glyphicon glyphicon-user"> {{__user__.name}}</span> </a></li>
                    {% else %}
-                     <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> 登陆</a></li>
+                     <li><a href="/signin"><span class="glyphicon glyphicon-log-in"></span> 登陆</a></li>
                      <li><a href="/register"><span class="glyphicon glyphicon-signal"></span> 注册</a></li>
                    {% endif%}
               </ul>

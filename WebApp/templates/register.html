@@ -6,7 +6,6 @@
 
     <!--自定义css-->
     <link rel="stylesheet" href="/static/css/MyRegister.css">
-    <script src="/static/js/vue.js"></script>
     <script src="/static/js/hashes.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +44,6 @@ $(function () {
                     alert('两次输入的口令不一致');
                     return $form.showFormError('两次输入的口令不一致');
                 }
-
                 var email = this.email.trim().toLowerCase();
                 var SHA1 = new Hashes.SHA1;
                 var psw = SHA1.hex(email + ':' + this.password1).toString();
@@ -55,8 +53,9 @@ $(function () {
                     passwd: psw
                 }, function (err, r) {
                     if (err) {
-                        return $form.showFormError(err);
+                        alert(err);
                     }
+
                     return location.assign('/');
                 });
             }
@@ -73,7 +72,7 @@ $(function () {
     <div>
         <h1 style="font-size: 40px">欢迎注册!</h1>
     </div>
-   <form id="fander"  role="form">
+   <form id="fander"  role="form" method="post">
       <div id="allInput" >
        <div class="form-group">
            <label for="name">名字</label>

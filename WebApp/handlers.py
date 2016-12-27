@@ -10,7 +10,8 @@ from aiohttp import web
 from coroweb import get, post
 
 from Models import User, Comment, Blog, next_id
-from  apis import APIValueError,APIError
+from  apis import APIValueError,APIError,APIPermissionError
+
 COOKIE_NAME = 'awesession'
 _COOKIE_KEY = 'nkjnihyugyftff'
 
@@ -39,6 +40,36 @@ def user_register(request):
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
+
+@post('/api/authenticate')
+async def authenticate(*, email, passwd):
+    if not email:
+        raise APIValueError('email', 'Invalid email.')
+    if not passwd:
+        raise APIValueError('passwd', 'Invalid password.')
+    users = await User.findAll('email=?', [email])
+    if len(users) == 0:
+        raise APIValueError('email', 'Email not exist.')
+    else:
+        logging.info('找到用户')
+    user = users[0]
+    # check passwd:
+    sha1 = hashlib.sha1()
+    sha1.update(user.id.encode('utf-8'))
+    sha1.update(b':')
+    sha1.update(passwd.encode('utf-8'))
+    if user.passwd != sha1.hexdigest():
+        raise APIValueError('passwd', 'Invalid password.')
+    # authenticate ok, set cookie:
+    r = web.Response()
+    r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
+    logging.info('设置cookie成功')
+    user.passwd = '******'
+    r.content_type = 'application/json'
+    r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
+    return r
+
+
 @post('/api/users')
 async def api_register_user(*, email, name, passwd):
     if not name or not name.strip():
@@ -62,46 +93,23 @@ async def api_register_user(*, email, name, passwd):
     r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
     return r
 
-@get('/login')
+@get('/signin')
 def user_sigin(request):
     return {
         '__template__' :'login.html'
     }
-@post('/api/authenticate')
-async  def authenticate(*,email,passwd):
-    logging.info(passwd.encode('utf-8'))
-    if not email:
-        raise APIValueError('email', 'Invalid email.')
-    if not passwd:
-        raise APIValueError('passwd', 'Invalid password.')
-    users = await User.findAll('email=?',[email])
-    if len(users) == 0:
-        raise APIValueError('email', 'Email not exist.')
-    user = users[0]
-    sha1_passwd = '%s:%s' % (user.id, passwd)
-    sh1_ss = hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest()
-    if user.passwd != sh1_ss:#验证密码 (uid:password)
-        raise APIValueError('passwd', 'Invalid password.')
-    #设置cookies:
-    r  = web.Response()
-    r.set_cookie(COOKIE_NAME,user2cookie(user,86400),max_age=86400,httponly=True)
-    logging.info('设置cookie')
-    user.passwd = '******'
-    r.content_type = 'application/json'
-    logging.info('授权成功')
-    r.body = json.dumps(user,ensure_ascii=False ).encode('utf-8')
-    logging.info(r.body)
-    return  r
+
 
 def user2cookie(user,max_age):
     expiress = str(int(time.time()) + max_age)
     s = '%s-%s-%s-%s' % (user.id,user.passwd,expiress,_COOKIE_KEY)
     L = [user.id,expiress,hashlib.sha1(s.encode('utf-8')).hexdigest()]
     logging.info('-'.join(L))
+    logging.info('cookie设置好了')
     return '-'.join(L)
 
-@asyncio.coroutine
-def cookie2user(cookie_str):
+
+async def cookie2user(cookie_str):
     '''
     Parse cookie and load user if cookie is valid.
     '''
@@ -114,7 +122,7 @@ def cookie2user(cookie_str):
         uid, expires, sha1 = L
         if int(expires) < time.time():
             return None
-        user = yield from User.find(uid)
+        user = await User.find(uid)
         if user is None:
             return None
         s = '%s-%s-%s-%s' % (uid, user.passwd, expires, _COOKIE_KEY)
@@ -141,11 +149,27 @@ def navigator(request):
         '__template__': 'naviTest.html'
     }
 
-@get('/edit')
+@get('/manager/blog/create')
 def editBlog(request):
     return {
-            '__template__': 'manage_blog_edit.html'
+            '__template__': 'manage_blog_edit.html',
+            'id': '',
+            'action': '/api/blogs'
     }
-# @get('/fander')
-# def fander(request):
-#     return dict(fander = 'Leon')
+#保存博客
+@post('/api/blogs')
+async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
+    check_admin(request)
+    if not blogtitle or not blogtitle.strip():
+        raise APIValueError('name', 'name cannot be empty.')
+    if not blogsummary or not blogsummary.strip():
+        raise APIValueError('summary', 'summary cannot be empty.')
+    if not blogcontent or not blogcontent.strip():
+        raise APIValueError('content', 'content cannot be empty.')
+    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent.strip())
+    await  blog.save()
+    return blog
+
+def check_admin(request):
+    if request.__user__ is None or not request.__user__.admin:
+        raise APIPermissionError()
