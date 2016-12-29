@@ -2,6 +2,7 @@
 {% block title %}编辑日志{% endblock %}
 {% block beforehead %}
  <script src="/static/js/awesome.js"></script>
+<link rel="stylesheet" href="/static/css/w3.css" />
  <script>
  var
        ID =  '{{ id }}',
@@ -19,7 +20,7 @@
                           return location.assign('/api/blogs/' + r.id)
                       }else {
                           $('#error').text(err.message);
-                          $('.alert').show();
+                          $('.w3-container').show();
                       }
                   });
 
@@ -30,7 +31,7 @@
  }
  
  $(function () {
-    $('.alert').hide();
+    $('.w3-container').hide();
 
     if(ID){
         getJSON('api/blogs' + ID,function (err,blog) {
@@ -58,8 +59,8 @@
 
 {% block content %}
 <div class="container">
-  <div  class="alert alert-danger col-sm-8 col-sm-offset-2" role="alert">
-   <p id="error"></p>
+  <div  class="w3-container w3-orange w3-text-white col-sm-8 col-sm-offset-2" style="top: 50%; bottom: 50%; margin-bottom: 20px; height: 50px ;text-align: center" role="alert">
+       <p id="error"></p>
   </div>
   <div class="row" >
     <div class="col-sm-8 col-sm-offset-2">
