@@ -33,7 +33,8 @@ body {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background: #444 url("debut_dark.png") repeat;
+  /*background: #444 url("debut_dark.png") repeat;*/
+  background-color: #333333;
   color: #666;
   font: normal 100%/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -78,21 +79,22 @@ a:hover {
 }
 
 .main {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
-  padding: 3em 4em;
-  position: fixed;
-  overflow: hidden;
-  overflow-y: scroll;
-  border-top-left-radius: 5px;
-  box-shadow: 0 0 15px rgba(0,0,0, .6);
-  top: .8em;
-  right: 0;
-  bottom: 0;
-  width: 76%;
-  background: #fff;
+  /*-webkit-box-sizing: border-box;*/
+  /*-moz-box-sizing: border-box;*/
+  /*box-sizing: border-box;*/
+  /*-webkit-overflow-scrolling: touch;*/
+  /*padding: 3em 4em;*/
+  /*position: absolute;*/
+  /*overflow: hidden;*/
+  /*overflow-y: scroll;*/
+  /*border-top-left-radius: 5px;*/
+  /*box-shadow: 0 0 15px rgba(0,0,0, .6);*/
+  background-color: #bce8f1;
+  /*top: .8em;*/
+  /*left: 1.4em;*/
+  /*width: 76%;*/
+float: left;
+
 }
 
 .main::-webkit-scrollbar {
@@ -106,18 +108,47 @@ a:hover {
   border-radius: 0;
   background-color: rgba(0,0,0, .4);
 }
+ .footer{
+   position: absolute;
+   background-color: #9c27b0;
+   height: 8em;
+   width: 100%;
 
+
+ }
+ #selfIntroduce{
+
+    width: 100%;
+    height: 10em;
+    background-color: beige;
+    top: .8em;
+    margin:0 auto;
+    overflow: hidden;
+   text-align: center;
+   vertical-align: middle;
+  }
+ .myIcon{
+   /*position: relative;*/
+   width: 6em;
+   height: 6em;
+   vertical-align:middle;
+ }
 .nav-collapse {
-  position: absolute;
-  width: 24%;
-  top: 2em;
-  left: 0;
+  /*position: fixed;*/
+  /*width: 24%;*/
+  /*top: .8em;*/
+  /*left: 1.4em;*/
+  /*overflow: hidden;*/
+  /*height: 60em;*/
+
+float: left;
 }
 
 .nav-collapse ul {
   display: block;
   width: 100%;
   list-style: none;
+
 }
 
 .nav-collapse li {
@@ -156,6 +187,7 @@ a:hover {
     display: block;
     overflow: hidden;
   }
+
   .nav-collapse {
     top: 0;
     width: 100%;
@@ -213,6 +245,8 @@ a:hover {
     width: 100%;
     overflow: hidden;
   }
+  #selfIntroduce {height: 0em}
+
   .main::-webkit-scrollbar { background-color: transparent }
 }
 
@@ -229,4 +263,5 @@ a:hover {
 @media screen and (min-width: 60em) {
   .nav-collapse { width: 18em }
   .main { width: auto; left: 18em }
+   #selfIntroduce {height: 10em}
 }

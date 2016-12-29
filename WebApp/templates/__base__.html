@@ -18,29 +18,64 @@
     <script src="/static/js/responsive-nav.js"></script>
   </head>
   <body>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-md-3 ">
+       <div role="navigation" id="foo" class="nav-collapse">
+           <ul>
+             <div id="selfIntroduce">
+              <img src="/static/img/kakaxi.jpg"  class=" myIcon">
+              <div class="descriptions">
+                <span>电子信息工程 英语六级GitHub:https://github.com/LeonHwa</span>
+             </div>
 
-    <div role="navigation" id="foo" class="nav-collapse">
-      <ul>
-        <li class="active"><a href="#">首页</a></li>
-        <li><a href="#">归档</a></li>
-        <li><a href="#">标签</a></li>
-           {% if __user__ %}
-             <li><a href="/signout">{{__user__.name}}</a></li>
-           {% else %}
-         <li><a href="/signin">登陆</a></li>
-         <li><a href="/register">注册</a></li>
-           {% endif%}
-      </ul>
-    </div>
+              </div>
 
-    <div role="main" class="main">
-      <a href="#nav" class="nav-toggle">Menu</a>
-       {% block content %}
-       {% endblock %}
+             <li class="active"><a href="#">首页</a></li>
+             <li><a href="#">归档</a></li>
+             <li><a href="#">标签</a></li>
+             {% if __user__ %}
+               <li><a href="/signout">{{__user__.name}}</a></li>
+             {% else %}
+              <li><a href="/signin">登陆</a></li>
+              <li><a href="/register">注册</a></li>
+              {% endif%}
+            </ul>
+       </div><!--nav-collapse end-->
+      </div>
+       <div class="col-md-9 ">
+         <div role="main" class="main">
+         <a href="#nav" class="nav-toggle">Menu</a>
+          {% block content %}
+           {% endblock %}
+         </div>
+       </div>
+    </div>  <!--first roe-->
+    <div class="row">
+         <div class="footer">
+
+         </div>
     </div>
+ </div>
 
     <script>
-      var navigation = responsiveNav("foo", {customToggle: ".nav-toggle"});
+       var navigation = responsiveNav("foo", { // Selector: The ID of the wrapper
+          animate: true, // Boolean: 是否启动CSS过渡效果（transitions）， true 或 false
+          transition: 400, // Integer: 过渡效果的执行速度，以毫秒（millisecond）为单位
+          label: "Menu", // String: Label for the navigation toggle
+          insert: "after", // String: Insert the toggle before or after the navigation
+           customToggle: ".nav-toggle", // Selector: Specify the ID of a custom toggle
+          openPos: "relative", // String: Position of the opened nav, relative or static
+          jsClass: "js", // String: 'JS enabled' class which is added to <html> el
+          debug: false, // Boolean: Log debug messages to console, true 或 false
+          init: function(){}, // Function: Init callback
+          open: function(){
+
+          }, // Function: Open callback
+          close: function(){
+
+          } // Function: Close callback
+});
     </script>
   </body>
 </html>
