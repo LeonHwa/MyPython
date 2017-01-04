@@ -1,0 +1,260 @@
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+img{
+  border: 0;
+  vertical-align: middle;
+}
+ul{
+  list-style: none;
+}
+p{
+  display: block;
+}
+a{
+  color: #a6a6a6;
+  text-decoration: none;
+  /*设置默认动画效果*/
+  transition: All 0.5s ease;
+  -webkit-transition: All 0.5s ease;
+  -moz-transition: All 0.5s ease;
+  -o-transition: All 0.5s ease;
+}
+a:hover{
+  background-color: #f9f9f9
+}
+
+body{
+  background: #f5f7f9;
+  /*font: 12px "宋体", "Arial Narrow", HELVETICA;*/
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3F3E3C;
+  line-height: 1.5;
+}
+.mainContent{
+  width: 1000px;
+ /*background-color: #E8E5DD;*/
+  margin: 20px auto;
+  overflow: hidden;
+}
+.left-box{
+  float: left;
+  width: 240px;
+  background-color: #fff;
+}
+
+
+aside{
+  width: 100%;
+}
+
+.avatar{
+  margin:24px auto;/*auto 后就居中了*/
+  width: 120px;
+  height:120px;
+  /*background-color: red;*/
+  /*border-radius: 160px;-moz-border-radius: 160px; -webkit-border-radius: 160px;*/
+  overflow: hidden;
+}
+.avatar a{
+  display: block;/*加上之后 图片才出来 ,奇怪*/
+  background: url("../images/photo.jpg") repeat;
+  background-size: 120px 120px;
+  width: 120px;
+  height: 120px;
+  /*padding-top: 77px;!*意思说 名字高度63*!*/
+}
+/*.avatar a span {*/
+  /*display: block;*/
+  /*margin-top: 43px;*/
+  /*padding-top: 8px;*/
+  /*width: 120px;*/
+  /*height: 55px;*/
+  /*text-align: center;*/
+  /*font-size: 16px;*/
+  /*line-height: 20px;*/
+  /*color: #fff;*/
+  /*background: rgba(0, 0, 0, .5);*/
+  /*-webkit-transition: margin-top .2s ease-in-out;*/
+  /*-moz-transition: margin-top .2s ease-in-out;*/
+  /*-o-transition: margin-top .2s ease-in-out;*/
+  /*transition: margin-top .2s ease-in-out;*/
+/*}*/
+
+.avatar a:hover span {
+  display: block; margin-top: 0;
+
+}
+
+.topspaceinfo{
+  background: #000;
+  padding: 26px ;
+  color: #fff;
+  text-align: center;
+}
+.topspaceinfo h1{
+  font-size: 16px;
+  line-height: 40px;/*间距?*/
+}
+
+.nav-collapse ul{
+  /*background: #fff;*/
+  padding-bottom: 20px;
+  padding-top: 20px;
+
+}
+.nav-collapse ul li:hover{
+  background: #f9f9f9;
+}
+.nav-collapse ul li{
+  padding: 8px 18px;
+}
+
+.nav-collapse ul li a{
+
+  font-size: 14px;
+  color: #000;
+}
+.nav-collapse ul li  a {
+  line-height: 24px;
+}
+.active{
+  background:#f9f9f9;
+}
+.seperator{
+  background-color: #f5f7f9;
+  width: 100%;
+  height: 10px;
+
+}
+.userInfo {
+  margin-top: 20px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000;
+  text-align: center;
+}
+#name{
+  color: #000;
+  font-size: 18px;
+}
+.userInfo .description{
+  color: #666666;
+  font-size: 12px;
+}
+aside section { display: block; overflow: hidden }
+
+.blogerInfo{
+  padding-left: 30px;
+  margin-top: 20px;
+}
+section div{
+  padding: 0;
+  display: inline-block;
+  width: 60px;
+  text-align: center;
+ border-right: 1px solid #e2e2e2;
+}
+section div:last-child{
+  border-right: 0;
+}
+section div span{
+  display: block;
+}
+section div span a{
+  color: #000;
+  font-size: 18px;
+}
+.tag{
+  color: #666666;
+}
+
+.taglist ul{
+  padding: 20px  30px;
+}
+.taglist ul li a{
+  margin-right: 5px; color: #454545;
+  display: inline-block;
+  float: left;
+  padding: 2px 5px;
+}
+
+.githublink{
+  margin: 24px 12px;
+}
+.githublink a{
+
+  background: url("../images/github.jpg") no-repeat 4% 40%;
+
+
+  padding: 3px  20px  0px 30px;
+  /*background-color: red;*/
+}
+
+.outLink{
+  border-top: 1px dashed #e2e2e2;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+/************************************************content**************************************************/
+
+
+.blog-header{
+  border-bottom: 1px solid #e2e2e2;
+}
+.title{
+  width: 100%;
+  background: url("../images/titlebg.png") no-repeat 5% 80%;
+  padding: 38px 60px 8px 80px;
+  line-height: 28px;
+  display: inline-block;
+}
+
+.right-box{
+  float: right;
+  width: 740px;
+  background-color: #fff;
+
+}
+.title a { color: #454545; }
+.title a:hover{padding: 20px}
+
+.blogContent{
+  font-size: 14px;
+  padding: 20px 40px;
+}
+.blogContent article{
+  border-bottom: #F4F3EF 40px solid; ;
+}
+.text p {
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+.textimg {
+  text-align: center;
+}
+.textimg img {
+  max-width: 500px;
+  width:expression(document.body.clientWidth > 500? "500px": "auto" );
+}
+.textFoot {
+  padding:20px 60px;
+  border-top: 1px solid #dddcdb;
+  text-align: right;
+  box-shadow:#999 2px 2px 3px  ;
+}
+
+.textFoot a{
+  margin-left: 10px;
+}
+
+/******************Footer*********************/
+footer{
+  border-top:9px solid #f16e50;
+ background: #242221;
+  width:100%;
+  height: 120px;
+}
