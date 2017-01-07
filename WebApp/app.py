@@ -117,7 +117,7 @@ async def auth_factory(app, handler):
                        request.__user__ = user
                if request.path.startswith('/manager/') and (request.__user__ is None or not request.__user__.admin):
                        # return web.HTTPFound('/signin')
-                       pass
+                        pass
                return( await handler(request))
   return auth
 def datetime_filter(t):

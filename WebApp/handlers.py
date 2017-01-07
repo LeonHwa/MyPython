@@ -193,3 +193,11 @@ async def get_blog(request,*,id):
     logging.info('调用  blog')
     logging.info(blog)
     return dict(blog = blog)
+
+
+@get('/test')
+def user_register(request):
+    return {
+        '__template__':'test.html'
+
+    }

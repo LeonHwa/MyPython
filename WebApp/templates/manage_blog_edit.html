@@ -1,90 +1,88 @@
-{% extends '__base__.html' %}
-{% block title %}编辑日志{% endblock %}
-{% block beforehead %}
- <script src="/static/js/awesome.js"></script>
-<link rel="stylesheet" href="/static/css/w3.css" />
- <script>
- var
-       ID =  '{{ id }}',
-       action = '{{ action }}';
- function initVM(blog) {
-      var vm = new Vue({
-          el:'#vm',
-          data:blog,
-          methods:{
-              submit:function (event) {
-                  event.preventDefault();
-                  var $form = $('#vm');
-                  $form.postJSON(action,this.$data,function (err,r) {
-                      if(!err){
+<!DOCTYPE html>
+<!--
+Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.md or http://ckeditor.com/license
+-->
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>写文章-Leon</title>
+   <script src="/static/js/jquery.min.js"></script>
+
+    <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
+    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
+
+    <script src="/static/js/awesome.js"></script>
+
+    <script src="/static/ckeditor/ckeditor.js"></script>
+	<script src="/static/ckeditor/samples/js/sample.js"></script>
+	<link rel="stylesheet" href="/static/ckeditor/samples/css/samples.css">
+	<link rel="stylesheet" href="/static/ckeditor/samples/toolbarconfigurator/lib/codemirror/neo.css">
+
+    <script>
+
+       var action = '{{ action }}';
+
+      function validateForm() {
+          var title = document.forms["myForm"]["blogTitle"].value;
+          var content = CKEDITOR.instances.editor.getData();
+           console.log('title = ' + title);
+          console.log(content);
+
+          var data = {
+              blogtitle: title,
+            blogsummary: 'a summary',
+            blogcontent: content
+          };
+
+
+          var $form = $('#myForm');
+          $form.postJSON(action,data,function (err,r) {
+                  if(!err){
                           return location.assign('/api/blogs/' + r.id)
-                      }else {
-                          $('#error').text(err.message);
-                          $('.w3-container').show();
-                      }
-                  });
+                  }else {
+                      alert('错误')
+                  }
+             });
 
-              }
-          }
-      });
-     $('vm').show();
- }
- 
- $(function () {
-    $('.w3-container').hide();
-
-    if(ID){
-        getJSON('api/blogs' + ID,function (err,blog) {
-            if(!err){
-                initVM(blog);
-            }
-        })
-    } else {
-        initVM({
-            blogtitle: '',
-            blogsummary: '',
-            blogcontent: ''
-        });
-    }
- });
- </script>
+          return false;
+      }
+   </script>
+</head>
+<body id="main">
 
 
-{% endblock %}
-
-
-
-
-
-
-{% block content %}
-<div class="container">
-  <div  class="w3-container w3-orange w3-text-white col-sm-8 col-sm-offset-2" style="top: 50%; bottom: 50%; margin-bottom: 20px; height: 50px ;text-align: center" role="alert">
-       <p id="error"></p>
-  </div>
-  <div class="row" >
-    <div class="col-sm-8 col-sm-offset-2">
-     <div class="from-box">
-        <form id="vm" role="form" method="post">
-             <div class="form-group">
-                 <label class="sr-only" for="blogtitle"></label>
-                 <input v-model = "blogtitle" type = "text" class="form-control" placeholder="标题" id="blogtitle"> </input>
-             </div>
-              <div class="form-group">
-                 <label class="sr-only" for="blogsummary"></label>
-                 <textarea   v-model = "blogsummary"  class="form-control" placeholder="简介" id="blogsummary" rows="2"> </textarea>
-             </div>
-             <div class="form-group">
-                  <label class="sr-only" for="blogcontent"></label>
-                 <textarea  v-model = "blogcontent" class="form-control" placeholder="内容" id="blogcontent" rows="10"> </textarea>
-             </div>
-             <div  class="form-group">
-              <button v-on:click="submit" type="submit" class="btn btn-success" style="margin-top: 20px" >提交</button>
-             </div>
-        </form>
-     </div>
+<main>
+    <form id="myForm" name="myForm" onsubmit="return validateForm()" method="post">
+	<div class="header-top">
+		<h2>写文章</h2>
+        <h3  style="margin: 20px 0  10px 0">标题</h3>
+   </div>
+     <div class="submitContainer">
+            <input type="submit" value="发布文章">
+       </div>
+	<div class="blogTitle">
+        <input type="text" name="blogTitle" style="width: 100%">
     </div>
-  </div>
-</div>
 
-{% endblock %}
+	<div class="adjoined-bottom">
+		<div class="grid-container">
+			<div class="grid-width-100">
+                <h2 style="margin: 0px 0  10px 0">内容</h2>
+				<div id="editor">
+					<p>enter your words...</p>
+
+				</div>
+			</div>
+		</div>
+	</div >
+
+    </form>
+</main>
+
+<script>
+ 	initSample();
+</script>
+
+</body>
+</html>
