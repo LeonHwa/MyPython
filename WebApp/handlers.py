@@ -16,16 +16,9 @@ COOKIE_NAME = 'awesession'
 _COOKIE_KEY = 'nkjnihyugyftff'
 
 @get('/')
-def index(request):
-    summary = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    blogs = [
-        Blog(id='1', name='Test Blog', summary=summary, created_at=time.time()-120),
-        Blog(id='2', name='Something New', summary=summary, created_at=time.time()-3600),
-        Blog(id='3', name='Learn Swift', summary=summary, created_at=time.time()-7200),
-        Blog(id='4', name='Learn Swift', summary=summary, created_at=time.time() - 7200),
-        Blog(id='5', name='Learn Swift', summary=summary, created_at=time.time() - 7200),
-        Blog(id='6', name='Learn Swift', summary=summary, created_at=time.time() - 7200),
-    ]
+async def index(request):
+    blogs = await Blog.findAll(orderBy='created_at')
+    logging.info(blogs)
     # jinja2
     return {
         '__template__': 'blogs.html',
@@ -169,8 +162,9 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
         raise APIValueError('summary', 'summary cannot be empty.')
     if not blogcontent or not blogcontent.strip():
         raise APIValueError('content', 'content cannot be empty.')
-    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent.strip())
+    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
     await  blog.save()
+    logging.info(blogcontent);
     return blog
 
 def check_admin(request):

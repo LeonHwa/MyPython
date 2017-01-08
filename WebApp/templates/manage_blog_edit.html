@@ -30,12 +30,12 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
           console.log(content);
 
           var data = {
-              blogtitle: title,
+            blogtitle: title,
             blogsummary: 'a summary',
             blogcontent: content
           };
 
-
+//          alert(content);
           var $form = $('#myForm');
           $form.postJSON(action,data,function (err,r) {
                   if(!err){
@@ -70,8 +70,6 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 			<div class="grid-width-100">
                 <h2 style="margin: 0px 0  10px 0">内容</h2>
 				<div id="editor">
-					<p>enter your words...</p>
-
 				</div>
 			</div>
 		</div>

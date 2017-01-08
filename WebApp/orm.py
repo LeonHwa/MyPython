@@ -136,7 +136,7 @@ class ModelMetaclass(type):
         attrs['__fields__'] = fields#类属(除了是主键以外的集合)
         attrs['__table__'] = tableName
 
-        #sql语句
+        #sql语句 (把他们作为string类型的 类属性)
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primarykey, ', '.join(escaped_field), tableName)
         attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (
         tableName, ', '.join(escaped_field), primarykey, create_args_string(len(escaped_field) + 1))

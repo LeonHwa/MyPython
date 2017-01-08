@@ -6,14 +6,17 @@
     <title>{% block title %} ? {% endblock %} - Awesome Python Webapp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script  src="/static/js/jquery.min.js"></script>
-    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
+      <!--高亮-->
+    <script src="/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <link rel="stylesheet" href="/static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <link rel="stylesheet" href="/static/bootStrap/css/bootstrap.min.css">
     <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
     <script src="/static/js/vue.js"></script>
 
-    <!--[if lte IE 8]><link rel="stylesheet" href="/static/css/responsive-nav.css"><![endif]-->
-   <link rel="stylesheet" href="../static/css/LeonStyles.css">
+    <link rel="stylesheet" href="../static/css/baseCss.css">
+   <link rel="stylesheet" href="/static/css/responsive-nav.css">
     <script src="/static/js/responsive-nav.js"></script>
   </head>
   <body>
@@ -64,85 +67,17 @@
        </div>
        <!--博客区域-->
        <div class="right-box">
-          <article>
-              <!--标题-->
-              <div class="blog-header">
-                  <h2 class="title"><a>陌上花开，可缓缓归矣</a></h2>
-              </div>
-              <!--内容-->
-              <div class="blogContent">
-                  <ul class="text">
-                      <p>“陌上花开，可缓缓归矣。” 含义：（夫人），田间阡陌上的花开了，你可以一边赏花，一边慢慢地回来。</p>
-                      <p>“陌上花开，如果没有悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白....”喜欢这句话，是因为看了忍冬的作品《陌上花开缓缓归》</p>
-                      <p>阳春三月，风和日暖，信步城外，看阡陌之上的杨柳依依，野花绚烂，身心不由得轻爽而浪漫。“三月风情陌上花”，古远的诗句似乎随风从天边飘来，从历史的深处飘来，拂过阡陌，袭上心头，诗是属于清乾嘉诗人赵翼的，可昂首远望，眼前的陌上风情却是不折不扣的现代，由眼帘入心扉。</p>
-                      <p class="textimg"><img src="../static/images/text02.jpg"></p>
-                      <p>漫步陌上，心情是诗意的那种，优雅而散淡，不惹匆促，只因陌上花开；花是自然的那种，朴素而恬淡，不落尘俗。“三月风情陌上花”，是花在其中生命得以璀璨，人在其中心情得以畅然的一种意境。三月陌上花，让人爱让人痴，恍惚人的骨子里头都沉淀了花的影子，花的风韵。</p>
-                      <p>陌上花开，如果没有了从俗累的生活中走出来，悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白。于是，一句“陌上花开，可缓缓归矣”不知被多少人吟诵了多少遍。人归缓缓，那花便有灵性，便开得执著，陌上风情也被撩拨得浓郁而热烈。</p>
-                      <p>缓缓归，缓缓归，披一袭“三月风情”，再采一束“陌上花”，缓缓归。</p>
-                      <p>缓缓归矣，我心已是陌上花开。</p>
-                  </ul>
-              </div>
-              <!--尾巴-->
-              <div class="textFoot">
-                  <a href="#">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
-
-              </div>
-          </article>
-
-           <article>
-               <!--标题-->
-               <div class="blog-header">
-                   <h2 class="title"><a>陌上花开，可缓缓归矣</a></h2>
-               </div>
-               <!--内容-->
-               <div class="blogContent">
-                   <ul class="text">
-                       <p>“陌上花开，可缓缓归矣。” 含义：（夫人），田间阡陌上的花开了，你可以一边赏花，一边慢慢地回来。</p>
-                       <p>“陌上花开，如果没有悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白....”喜欢这句话，是因为看了忍冬的作品《陌上花开缓缓归》</p>
-                       <p>阳春三月，风和日暖，信步城外，看阡陌之上的杨柳依依，野花绚烂，身心不由得轻爽而浪漫。“三月风情陌上花”，古远的诗句似乎随风从天边飘来，从历史的深处飘来，拂过阡陌，袭上心头，诗是属于清乾嘉诗人赵翼的，可昂首远望，眼前的陌上风情却是不折不扣的现代，由眼帘入心扉。</p>
-                       <p class="textimg"><img src="../static/images/text02.jpg"></p>
-                       <p>漫步陌上，心情是诗意的那种，优雅而散淡，不惹匆促，只因陌上花开；花是自然的那种，朴素而恬淡，不落尘俗。“三月风情陌上花”，是花在其中生命得以璀璨，人在其中心情得以畅然的一种意境。三月陌上花，让人爱让人痴，恍惚人的骨子里头都沉淀了花的影子，花的风韵。</p>
-                       <p>陌上花开，如果没有了从俗累的生活中走出来，悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白。于是，一句“陌上花开，可缓缓归矣”不知被多少人吟诵了多少遍。人归缓缓，那花便有灵性，便开得执著，陌上风情也被撩拨得浓郁而热烈。</p>
-                       <p>缓缓归，缓缓归，披一袭“三月风情”，再采一束“陌上花”，缓缓归。</p>
-                       <p>缓缓归矣，我心已是陌上花开。</p>
-                   </ul>
-               </div>
-               <!--尾巴-->
-               <div class="textFoot">
-                   <a href="#">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
-
-               </div>
-           </article>
-
-           <article>
-               <!--标题-->
-               <div class="blog-header">
-                   <h2 class="title"><a>陌上花开，可缓缓归矣</a></h2>
-               </div>
-               <!--内容-->
-               <div class="blogContent">
-                   <ul class="text">
-                       <p>“陌上花开，可缓缓归矣。” 含义：（夫人），田间阡陌上的花开了，你可以一边赏花，一边慢慢地回来。</p>
-                       <p>“陌上花开，如果没有悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白....”喜欢这句话，是因为看了忍冬的作品《陌上花开缓缓归》</p>
-                       <p>阳春三月，风和日暖，信步城外，看阡陌之上的杨柳依依，野花绚烂，身心不由得轻爽而浪漫。“三月风情陌上花”，古远的诗句似乎随风从天边飘来，从历史的深处飘来，拂过阡陌，袭上心头，诗是属于清乾嘉诗人赵翼的，可昂首远望，眼前的陌上风情却是不折不扣的现代，由眼帘入心扉。</p>
-                       <p class="textimg"><img src="../static/images/text02.jpg"></p>
-                       <p>漫步陌上，心情是诗意的那种，优雅而散淡，不惹匆促，只因陌上花开；花是自然的那种，朴素而恬淡，不落尘俗。“三月风情陌上花”，是花在其中生命得以璀璨，人在其中心情得以畅然的一种意境。三月陌上花，让人爱让人痴，恍惚人的骨子里头都沉淀了花的影子，花的风韵。</p>
-                       <p>陌上花开，如果没有了从俗累的生活中走出来，悄然伫立阡陌并为陌上风情所陶醉的人，那么花开也寂寞，风情也苍白。于是，一句“陌上花开，可缓缓归矣”不知被多少人吟诵了多少遍。人归缓缓，那花便有灵性，便开得执著，陌上风情也被撩拨得浓郁而热烈。</p>
-                       <p>缓缓归，缓缓归，披一袭“三月风情”，再采一束“陌上花”，缓缓归。</p>
-                       <p>缓缓归矣，我心已是陌上花开。</p>
-                   </ul>
-               </div>
-               <!--尾巴-->
-               <div class="textFoot">
-                   <a href="#">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
-
-               </div>
-           </article>
+           {% block content %}
+            {% endblock %}
        </div>
 
    </div>
-   <footer>
 
+   <footer>
+      <div style="color: white;">
+          <p style=" margin-top: 20px">© 2016 - 2017<span class="glyphicon glyphicon-fire"></span> Leon Hwa</p>
+          <p>Power By <a href="https://www.python.org">Python</a></p>
+      </div>
    </footer>
 </body>
 </html>
