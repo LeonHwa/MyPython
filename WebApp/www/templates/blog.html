@@ -1,0 +1,28 @@
+{% extends '__base__.html' %}
+
+{% block title %} {{blog.name}} {% endblock %}
+
+
+{% block beforehead %}
+   <link rel="stylesheet" href="/www/static/css/my_detail_blog.css">
+<script>
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div class="header">
+    <h2 id="woaini">{{blog.name}}</h2>
+    <div class="sumary">
+        <p>发表于{{blog.created_at|datetime }}</p>
+        {% if comments %}
+        <p> {{comments|length}}条评论</p>
+        {% else %}
+        <p>暂无评论</p>
+        {%  endif %}
+        <p>浏览次数 0</p>
+    </div>
+
+</div>
+
+{% endblock %}

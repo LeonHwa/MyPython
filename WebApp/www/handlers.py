@@ -66,6 +66,7 @@ async def authenticate(*, email, passwd):
     return r
 
 
+# 注册
 @post('/api/users')
 async def api_register_user(*, email, name, passwd):
     if not name or not name.strip():
@@ -139,12 +140,9 @@ def signout(request):
     logging.info('user signed out.')
     return r
 
-@get('/navigator')
-def navigator(request):
-    return {
-        '__template__': 'naviTest.html'
-    }
 
+
+#请求创建博客页面
 @get('/manager/blog/create')
 def editBlog(request):
     return {
@@ -188,6 +186,19 @@ async def get_blog(request,*,id):
     logging.info(blog)
     return dict(blog = blog)
 
+
+
+@get('/blog/{id}')
+async def get_detailBlog(id):
+    blog = await Blog.find(id)
+    c1 = Comment(id='ssd',blog_id = 'hhhhhhh',created_at = '2222')
+    c2 = Comment(id='ssd', blog_id='hhhhhhh',created_at = '2222')
+    comments = [c1,c2]
+    return {
+        '__template__': 'blog.html',
+        'blog': blog,
+        'comments': comments
+    }
 
 @get('/test')
 def user_register(request):

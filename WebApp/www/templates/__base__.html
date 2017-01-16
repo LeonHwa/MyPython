@@ -3,21 +3,23 @@
   <head>
     <meta charset="utf-8">
      {% block meta %}<!-- block meta  -->{% endblock %}
-    <title>{% block title %} ? {% endblock %} - Awesome Python Webapp</title>
+    <title>{% block title %} ? {% endblock %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script  src="/static/js/jquery.min.js"></script>
+    <script  src="/www/static/js/jquery.min.js"></script>
       <!--高亮-->
-    <script src="/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-    <link rel="stylesheet" href="/static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
+    <script src="/www/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <link rel="stylesheet" href="/www/static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
     <script>hljs.initHighlightingOnLoad();</script>
 
-    <link rel="stylesheet" href="/static/bootStrap/css/bootstrap.min.css">
-    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
-    <script src="/static/js/vue.js"></script>
+    <link rel="stylesheet" href="/www/static/bootStrap/css/bootstrap.min.css">
+    <script  src="/www/static/bootStrap/js/bootstrap.min.js"></script>
+    <script src="/www/static/js/vue.js"></script>
 
     <link rel="stylesheet" href="../static/css/baseCss.css">
-   <link rel="stylesheet" href="/static/css/responsive-nav.css">
-    <script src="/static/js/responsive-nav.js"></script>
+   <link rel="stylesheet" href="/www/static/css/responsive-nav.css">
+      <script src="/www/static/js/responsive-nav.js"></script>
+
+    {% block beforehead %}<!-- before head  -->{% endblock %}
   </head>
   <body>
    <div class="mainContent">
@@ -42,7 +44,7 @@
 
                <div class="userInfo">
                 <p id="name">华玉凡</p>
-                <p class="description">当个忧郁的小丑 放大这个城市的笑容</p>
+                <p class="description">xxx</p>
                </div>
                 <section class="blogerInfo">
                     <div>
