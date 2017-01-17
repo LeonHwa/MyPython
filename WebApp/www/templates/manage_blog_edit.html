@@ -26,12 +26,13 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
       function validateForm() {
           var title = document.forms["myForm"]["blogTitle"].value;
           var content = CKEDITOR.instances.editor.getData();
+          var summary =  CKEDITOR.instances.sumary_editor.getData();
            console.log('title = ' + title);
-          console.log(content);
-
+           console.log(content);
+           console.log(summary)
           var data = {
             blogtitle: title,
-            blogsummary: 'a summary',
+            blogsummary: summary,
             blogcontent: content
           };
 
@@ -68,7 +69,10 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 	<div class="adjoined-bottom">
 		<div class="grid-container">
 			<div class="grid-width-100">
-                <h2 style="margin: 0px 0  10px 0">内容</h2>
+                <h2 style="margin: 0px 0  10px 0">简介</h2>
+                <div id="sumary_editor">
+				</div>
+                 <h2 style="margin: 0px 0  10px 0">内容</h2>
 				<div id="editor">
 				</div>
 			</div>

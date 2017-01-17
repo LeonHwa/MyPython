@@ -4,7 +4,7 @@
 
 
 {% block beforehead %}
-   <link rel="stylesheet" href="/www/static/css/my_detail_blog.css">
+   <link rel="stylesheet" href="../static/css/my_detail_blog.css">
 <script>
 </script>
 {% endblock %}
@@ -12,7 +12,7 @@
 
 {% block content %}
 <div class="header">
-    <h2 id="woaini">{{blog.name}}</h2>
+    <h2 id="title">{{blog.name}}</h2>
     <div class="sumary">
         <p>发表于{{blog.created_at|datetime }}</p>
         {% if comments %}
@@ -24,5 +24,27 @@
     </div>
 
 </div>
+<div class="blog_detail_content">
+     {{blog.content|safe}}
+</div>
+
+
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-category="ios" data-thread-key= {{blog.id}} data-title= {{blog.name}} data-author-key= {{blog.user_id}} data-limit = 12 style="padding: 0 20px"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yybbox"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
 
 {% endblock %}

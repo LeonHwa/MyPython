@@ -1,5 +1,22 @@
 
-#woaini {
-    background: red;
-    margin-left: 100px;
+.header {
+    text-align: center;
+}
+h2 {
+ font-size: 24px;
+}
+.sumary p {
+    display: inline-block;
+    border-right: 2px solid #e2e2e2;
+    padding: 0px 10px;
+    font-size: 13px;
+}
+#title {
+    /*background: red;*/
+}
+a {
+    color: #00B0E8;
+}
+.blog_detail_content{
+    padding: 40px;
 }

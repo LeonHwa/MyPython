@@ -5,21 +5,21 @@
      {% block meta %}<!-- block meta  -->{% endblock %}
     <title>{% block title %} ? {% endblock %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script  src="/www/static/js/jquery.min.js"></script>
+    <script  src="../static/js/jquery.min.js"></script>
       <!--高亮-->
-    <script src="/www/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <script src="../static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <link rel="stylesheet" href="/www/static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
     <script>hljs.initHighlightingOnLoad();</script>
 
-    <link rel="stylesheet" href="/www/static/bootStrap/css/bootstrap.min.css">
-    <script  src="/www/static/bootStrap/js/bootstrap.min.js"></script>
-    <script src="/www/static/js/vue.js"></script>
+    <link rel="stylesheet" href="../static/bootStrap/css/bootstrap.min.css">
+    <script  src="../static/bootStrap/js/bootstrap.min.js"></script>
+    <script src="../static/js/vue.js"></script>
 
     <link rel="stylesheet" href="../static/css/baseCss.css">
-   <link rel="stylesheet" href="/www/static/css/responsive-nav.css">
-      <script src="/www/static/js/responsive-nav.js"></script>
+   <link rel="stylesheet" href="../static/css/responsive-nav.css">
+      <script src="../static/js/responsive-nav.js"></script>
 
-    {% block beforehead %}<!-- before head  -->{% endblock %}
+    {% block beforehead %} {% endblock %}
   </head>
   <body>
    <div class="mainContent">
@@ -32,9 +32,9 @@
                </section>
                <div role="navigation" id="nav" class="nav-collapse">
                    <ul>
-                       <li class="active"><a href="#">首页</a></li>
-                       <li><a href="#">归档</a></li>
-                       <li><a href="/test">标签</a></li>
+                       <li class="active"><span class="glyphicon glyphicon-home"> <a href="/">首页 &middot</a></li>
+                       <li><span class="glyphicon glyphicon-briefcase">  <a href="#">归档</a></li>
+                       <li><span class="glyphicon glyphicon-tags">  <a href="/test">标签</a></li>
                    </ul>
                </div>
                <div class="seperator"></div>

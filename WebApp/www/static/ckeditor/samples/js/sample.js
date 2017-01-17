@@ -32,6 +32,8 @@ var initSample = ( function() {
 		// Depending on the wysiwygare plugin availability initialize classic or inline editor.
 		if ( wysiwygareaAvailable ) {
 			CKEDITOR.replace( 'editor' );
+			CKEDITOR.replace( 'sumary_editor' );
+
 		} else {
 			editorElement.setAttribute( 'contenteditable', 'true' );
 			CKEDITOR.inline( 'editor' );

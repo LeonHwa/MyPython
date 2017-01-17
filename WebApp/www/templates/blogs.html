@@ -14,17 +14,27 @@
               <article>
               <!--标题-->
               <div class="blog-header">
-                  <h2 class="title"><a>{{blog.name}}</a></h2>
+                <h2 id="title">{{blog.name}}</h2>
+                <div class="sumary">
+                   <p>发表于{{blog.created_at|datetime }}</p>
+                  {% if comments %}
+                  <p> {{comments|length}}条评论</p>
+                  {% else %}
+                  <p>暂无评论</p>
+                  {%  endif %}
+                 <p>浏览次数 0</p>
+              </div>
               </div>
               <!--内容-->
               <div class="blogContent" htmlEscape="false">
                   <!--<ul class="text">-->
-                  {{blog.content|safe}}
+                  {{blog.summary|safe}}
                   <!--</ul>-->
               </div>
               <!--尾巴-->
               <div class="textFoot">
-                  <a href="/blog/{{ blog.id }}">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
+                  <a href="/blog/{{ blog.id }}">阅读全文 >></a>
+                  <div class="bottom-seperator"></div>
               </div>
           </article>
 
