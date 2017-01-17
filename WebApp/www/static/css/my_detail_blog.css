@@ -11,6 +11,10 @@ h2 {
     padding: 0px 10px;
     font-size: 13px;
 }
+
+.sumary p:last-child{
+    border-right: 0;
+}
 #title {
     /*background: red;*/
 }

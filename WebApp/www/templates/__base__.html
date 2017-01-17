@@ -18,14 +18,17 @@
     <link rel="stylesheet" href="../static/css/baseCss.css">
    <link rel="stylesheet" href="../static/css/responsive-nav.css">
       <script src="../static/js/responsive-nav.js"></script>
-
+    <script src="../static/js/base.js"></script>
     {% block beforehead %} {% endblock %}
+      <script>
+
+      </script>
   </head>
   <body>
    <div class="mainContent">
        <!--个人信息-->
        <div class="left-box">
-           <aside>
+           <aside class="pinContainer">
                <section class="topspaceinfo">
                    <h1>Leon Hwa'blog</h1>
                    <p>电子信息工程专业 iOS developer</p>
@@ -37,34 +40,35 @@
                        <li><span class="glyphicon glyphicon-tags">  <a href="/test">标签</a></li>
                    </ul>
                </div>
+
                <div class="seperator"></div>
+             <div class="pin">
                <div class="avatar">
                    <a href="#"></a>
                </div>
 
-               <div class="userInfo">
-                <p id="name">华玉凡</p>
-                <p class="description">xxx</p>
-               </div>
-                <section class="blogerInfo">
-                    <div>
-                        <span><a href="#">183</a><span class="tag">日志</span></span>
-                    </div>
-                    <div>
-                       <span> <a href="#">6</a><span class="tag">分类</span></span>
-                    </div>
-                    <div>
+                  <div class="userInfo">
+                      <p id="name">华玉凡</p>
+                      <p class="description">xxx</p>
+                  </div>
+                  <section class="blogerInfo">
+                      <div>
+                          <span><a href="#">183</a><span class="tag">日志</span></span>
+                      </div>
+                      <div>
+                         <span> <a href="#">6</a><span class="tag">分类</span></span>
+                      </div>
+                      <div>
                          <span><a href="#">11</a><span class="tag">标签</span></span>
-                    </div>
-
-                 </ul>
-                </section>
-                <div class="githublink">
+                      </div>
+                 </section>
+                 <div class="githublink">
                     <a href="#">Github</a>
-                </div>
-               <div class="outLink">
+                 </div>
+                 <div class="outLink">
                    <span class="glyphicon glyphicon-globe"> Links</span>
-               </div>
+                 </div>
+                </div>
            </aside>
        </div>
        <!--博客区域-->
@@ -82,4 +86,8 @@
       </div>
    </footer>
 </body>
+ <script src="../static/js/jquery.pin.js"></script>
+<script>
+    $(".pin").pin({containerSelector: ".pinContainer", minWidth: 940});
+</script>
 </html>
