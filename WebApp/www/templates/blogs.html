@@ -5,37 +5,36 @@
 {% block beforehead %}
 
 
-
 {% endblock %}
 
 {% block content %}
-
     {% for blog in blogs %}
               <article>
               <!--标题-->
               <div class="blog-header">
-                <h2 id="title">{{blog.name}}</h2>
-                <div class="sumary">
-                   <p>发表于{{blog.created_at|datetime }}</p>
-                  {% if comments %}
-                  <p> {{comments|length}}条评论</p>
-                  {% else %}
-                  <p>暂无评论</p>
-                  {%  endif %}
-                 <p>浏览次数 0</p>
-              </div>
+                 <h2 id="blogName">{{blog.name}}</h2>
+                 <div class="sumary">
+                    <p>发表于{{blog.created_at|datetime }}</p>
+                    {% if comments %}
+                    <p> {{comments|length}}条评论</p>
+                    {% else %}
+                    <p>暂无评论</p>
+                    {%  endif %}
+                    <p>浏览次数 0</p>
+                 </div>
               </div>
               <!--内容-->
-              <div class="blogContent" htmlEscape="false">
+              <div class="blogContent" >
                   <!--<ul class="text">-->
                   {{blog.summary|safe}}
                   <!--</ul>-->
               </div>
-              <!--尾巴-->
               <div class="textFoot">
                   <a href="/blog/{{ blog.id }}">阅读全文 >></a>
-                  <div class="bottom-seperator"></div>
               </div>
+                  <!--尾巴-->
+               <!--<div class="bottom-seperator"></div>-->
+               <div class="sep" style="margin: 0"><span class="left-arrow arrow"></span><span class="right-arrow arrow"></span></div>
           </article>
 
     {% endfor %}
