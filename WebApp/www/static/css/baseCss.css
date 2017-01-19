@@ -12,13 +12,13 @@ ul{
 }
 p{
   display: block;
+
 }
 a{
   color: #a6a6a6;
   text-decoration: none;
 }
-
-
+a:focus {  outline:none;   -moz-outline:none;text-decoration: none;}
 a:hover{
   background-color: #f9f9f9;
   text-decoration: none;
@@ -86,19 +86,20 @@ aside{
 .nav-collapse ul{
   padding-bottom: 20px;
   padding-top: 20px;
+  vertical-align: middle;
 
 }
 .nav-collapse ul li:hover{
   background: #f9f9f9;
-}
-.nav-collapse ul li{
-  padding: 8px 18px;
 }
 
 .nav-collapse ul li a{
   font-size: 14px;
   color: #000;
   text-decoration: none;
+  width: 90%;
+  display: inline-block;
+  padding: 8px 18px;
 }
 .nav-collapse ul li  a {
   line-height: 24px;
@@ -217,6 +218,7 @@ section div span a{
 }
 article{
     background-color: #FFF;
+    padding-top: 20px;
 }
 
 .blog-header{
