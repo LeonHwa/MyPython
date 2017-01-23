@@ -28,11 +28,15 @@ def get_page_index(page_str):
 async def index(*,page = '1'):
     page_index = get_page_index(page)
     blogCount = await Blog.findNumber('count(id)')
+    page = PageManager(blogCount, page_index)
+    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     # jinja2
     return {
         '__template__': 'blogs.html',
         'blogCount':blogCount,
         'page_index' : page_index,
+         'page':page,
+         'blogs':blogs
     }
 
 @get('/register')
@@ -187,6 +191,7 @@ def user_register(request):
 '''
 API
 '''
+
 #翻页
 @get('/api/blogs')
 async  def get_api_blogs(*,page= '1'):
