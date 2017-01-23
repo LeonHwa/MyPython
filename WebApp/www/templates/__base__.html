@@ -6,6 +6,7 @@
     <title>{% block title %} ? {% endblock %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script  src="../static/js/jquery.min.js"></script>
+
       <!--高亮-->
     <script src="../static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <link rel="stylesheet" href="../static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
@@ -13,10 +14,10 @@
 
     <link rel="stylesheet" href="../static/bootStrap/css/bootstrap.min.css">
     <script  src="../static/bootStrap/js/bootstrap.min.js"></script>
-    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/vue.min.js"></script>
 
-   <link rel="stylesheet" href="../static/css/responsive-nav.css">
-      <script src="../static/js/responsive-nav.js"></script>
+   <!--<link rel="stylesheet" href="../static/css/responsive-nav.css">-->
+      <!--<script src="../static/js/responsive-nav.js"></script>-->
 
     <script src="../static/js/base.js"></script>
     <link rel="stylesheet" href="../static/css/baseCss.css">
@@ -52,7 +53,7 @@
                     </div>
                     <section class="blogerInfo">
                        <div>
-                          <span><a href="#">183</a><span class="tag">日志</span></span>
+                          <span><a href="#">{{blogCount}}</a><span class="tag">日志</span></span>
                        </div>
                        <div>
                          <span> <a href="#">6</a><span class="tag">分类</span></span>

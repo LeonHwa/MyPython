@@ -1,0 +1,7 @@
+.active span{
+    background: red;
+}
+
+.pagination li{
+    background: #000;
+}

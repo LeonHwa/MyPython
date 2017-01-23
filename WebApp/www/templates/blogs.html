@@ -5,38 +5,105 @@
 {% block beforehead %}
 
 
+ <script src="../static/js/blogs/home.js"></script>
+ <link rel="stylesheet" href="../static/css/home/home.css">
+ <script src="../static/js/awesome.js"></script>
+
+ <script>
+
+function getBlogs() {
+
+    getJSON('/api/blogs', {
+        page: {{page_index}}
+    }, function (err, result) {
+        if (result) {
+
+            blogs = result.blogs;
+            page = result.page;
+            page_index = result.page_index;
+            console.log('hello');
+            var pre_disable = true;
+            next_disable = true;
+            if (page.has_pre) {
+                pre_disable = false
+            }
+            if (page.has_next) {
+                next_disable = false
+            }
+            data = {
+                has_pre: pre_disable,
+                has_next: next_disable,
+                response: result
+            };
+            addPage(page);
+            initVM(data);
+        }
+    });
+
+}
+function initVM(data) {
+
+    vm = new Vue({
+        el: '#vm',
+        data:{
+         has_pre:data.has_pre,
+         has_next:data.has_next,
+         blogs :data.response.blogs,
+         page : data.response.page,
+         page_index : data.response.page_index
+        },
+         methods: {
+            edit_blog: function (blog) {
+                location.assign('/manage/blogs/edit?id=' + blog.id);
+            },
+            greet: function (event) {
+               alert(this.blogs[0].name);
+    }
+        }
+
+    });
+    $('#vm').show();
+}
+
+  $(function (){
+       getBlogs();
+  });
+
+
+
+     
+ </script>
+
 {% endblock %}
 
 {% block content %}
-    {% for blog in blogs %}
-              <article>
-              <!--标题-->
-              <div class="blog-header">
-                 <h2 id="blogName">{{blog.name}}</h2>
-                 <div class="sumary">
-                    <p>发表于{{blog.created_at|datetime }}</p>
-                    {% if comments %}
-                    <p> {{comments|length}}条评论</p>
-                    {% else %}
-                    <p>暂无评论</p>
-                    {%  endif %}
-                    <p>浏览次数 0</p>
-                 </div>
-              </div>
+ <div id="vm">
+
+       <article v-for = "blog in blogs" >
+           <!--标题-->
+           <div class="blog-header">
+               <h2 id="blogName" v-text="blog.name"></h2>
+               <div class="sumary">
+                   <p v-text = "blog.created_at"></p>
+                   <p>暂无评论</p>
+                   <p>浏览次数 0</p>
+               </div>
+           </div>
               <!--内容-->
-              <div class="blogContent" >
-                  <!--<ul class="text">-->
-                  {{blog.summary|safe}}
-                  <!--</ul>-->
+              <div class="blogContent" v-text = "blog.summary">
               </div>
               <div class="textFoot">
-                  <a href="/blog/{{ blog.id }}">阅读全文 >></a>
+                  <a target="_blank" >阅读全文 </a>
               </div>
                   <!--尾巴-->
                <!--<div class="bottom-seperator"></div>-->
                <div class="sep" style="margin: 0"><span class="left-arrow arrow"></span><span class="right-arrow arrow"></span></div>
-          </article>
-
-    {% endfor %}
-
+      </article>
+<nav class="page-nav">
+  <ul class="pagination pagination-sm">
+    <li id="pre" v-bind:class="{ disabled: has_pre}"><span>&laquo;</span></li>
+    <li id="next" v-bind:class="{ disabled: has_next}"  v-on:click="greet"><span>&raquo;</span></li>
+  </ul>
+</nav>
+</div>
 {% endblock %}

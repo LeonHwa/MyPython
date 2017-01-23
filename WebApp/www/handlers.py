@@ -10,23 +10,33 @@ from aiohttp import web
 from coroweb import get, post
 
 from Models import User, Comment, Blog, next_id
-from  apis import APIValueError,APIError,APIPermissionError
+from  apis import APIValueError,APIError,APIPermissionError,PageManager
 
 COOKIE_NAME = 'awesession'
 _COOKIE_KEY = 'nkjnihyugyftff'
 
+def get_page_index(page_str):
+    p = 1
+    try:
+        p = int(page_str)
+    except ValueError as e:
+        pass
+    if p < 1:
+        p = 1
+    return p
 @get('/')
-async def index(request):
-    blogs = await Blog.findAll(orderBy='created_at')
-    logging.info(blogs)
+async def index(*,page = '1'):
+    page_index = get_page_index(page)
+    blogCount = await Blog.findNumber('count(id)')
     # jinja2
     return {
         '__template__': 'blogs.html',
-        'blogs': blogs
+        'blogCount':blogCount,
+        'page_index' : page_index,
     }
 
 @get('/register')
-def user_register(request):
+def user_registers(request):
     return {
         '__template__':'register.html'
 
@@ -150,41 +160,7 @@ def editBlog(request):
             'id': '',
             'action': '/api/blogs'
     }
-#保存博客
-@post('/api/blogs')
-async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
-    # check_admin(request)
-    if not blogtitle or not blogtitle.strip():
-        raise APIValueError('name', 'name cannot be empty.')
-    if not blogsummary or not blogsummary.strip():
-        raise APIValueError('summary', 'summary cannot be empty.')
-    if not blogcontent or not blogcontent.strip():
-        raise APIValueError('content', 'content cannot be empty.')
-    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
-    await  blog.save()
-    logging.info(blogcontent);
-    return blog
 
-def check_admin(request):
-    if request.__user__ is None or not request.__user__.admin:
-        raise APIPermissionError()
-
-
-@get('/api/blogs/{id}')
-async def get_blog(request,*,id):
-    blog = await Blog.find(id)
-    # comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
-    # for c in comments:
-    #     c.html_content = text2html(c.content)
-    # blog.html_content = markdown2.markdown(blog.content)
-    # return {
-    #     '__template__': 'blog.html',
-    #     'blog': blog,
-    #     'comments': ''
-    # }
-    logging.info('调用  blog')
-    logging.info(blog)
-    return dict(blog = blog)
 
 
 
@@ -206,3 +182,49 @@ def user_register(request):
         '__template__':'test.html'
 
     }
+
+# ######################################################------API--------#####################################################
+'''
+API
+'''
+#翻页
+@get('/api/blogs')
+async  def get_api_blogs(*,page= '1'):
+    page_index = get_page_index(page)
+    blogCount = await Blog.findNumber('count(id)')
+    page = PageManager(blogCount, page_index)
+    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+    return  dict(blogs = blogs,page = page,page_index = page_index)
+#保存博客
+@post('/api/blogs')
+async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
+    # check_admin(request)
+    if not blogtitle or not blogtitle.strip():
+        raise APIValueError('name', 'name cannot be empty.')
+    if not blogsummary or not blogsummary.strip():
+        raise APIValueError('summary', 'summary cannot be empty.')
+    if not blogcontent or not blogcontent.strip():
+        raise APIValueError('content', 'content cannot be empty.')
+    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
+    await  blog.save()
+    logging.info(blogcontent);
+    return blog
+
+def check_admin(request):
+    if request.__user__ is None or not request.__user__.admin:
+        raise APIPermissionError()
+
+# @get('/api/blogs')
+# async def api_blogs(*, page='1'):
+#     page_index = get_page_index(page)
+#     blogCount = await Blog.findNumber('count(id)')
+#     page = PageManager(blogCount,page_index)
+#     blogs = await Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+#     return dict(blogs = blogs,page = page)
+
+@get('/api/blogs/{id}')
+async def get_blog(request,*,id):
+    blog = await Blog.find(id)
+    logging.info('调用  blog')
+    logging.info(blog)
+    return dict(blog = blog)
