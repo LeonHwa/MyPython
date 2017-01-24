@@ -40,7 +40,7 @@ async def index(*,page = '1'):
     }
 
 @get('/register')
-def user_registers(request):
+async def user_registers(request):
     return {
         '__template__':'register.html'
 
@@ -50,6 +50,19 @@ def user_registers(request):
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
+@get('/archives/')
+async def  archives(*,page = '1'):
+    page_index = get_page_index(page)
+    blogCount = await Blog.findNumber('count(id)')
+    page = PageManager(blogCount, page_index,page_base = 6)
+    blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+    return {
+        '__template__':'blog_list.html',
+        'blogCount': blogCount,
+        'page_index': page_index,
+        'page': page,
+        'blogs': blogs
+    }
 
 @post('/api/authenticate')
 async def authenticate(*, email, passwd):
@@ -166,8 +179,6 @@ def editBlog(request):
     }
 
 
-
-
 @get('/blog/{id}')
 async def get_detailBlog(id):
     blog = await Blog.find(id)
@@ -210,7 +221,7 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
         raise APIValueError('summary', 'summary cannot be empty.')
     if not blogcontent or not blogcontent.strip():
         raise APIValueError('content', 'content cannot be empty.')
-    blog = Blog(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
+    blog = Blog(tag = '开发',user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
     await  blog.save()
     logging.info(blogcontent);
     return blog

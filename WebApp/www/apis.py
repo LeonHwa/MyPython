@@ -23,12 +23,9 @@ class PageManager(object):
         self.offset = (page_index - 1) * page_base
 
         if page_index < self.page_count:
-            self.limit = page_base
+            self.limit = page_base * self.current_page
         elif page_index == self.page_count:
-            if self.page_count == 1:
-                self.limit = blog_count
-            else:
-                self.limit = blog_count%page_base
+              self.limit = (self.current_page - 1) * page_base
         elif page_index > self.page_count:
             self.limit = 0
 

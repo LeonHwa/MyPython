@@ -15,7 +15,7 @@
         el: '#vm',
         data:{
          has_pre:data.has_pre,
-         has_next:data.has_next,
+         has_next:data.has_next
         },
          methods: {
             next_page: function () {
@@ -45,7 +45,7 @@
             }
             data = {
                 has_pre: pre_disable,
-                has_next: next_disable,
+                has_next: next_disable
             };
             var page_count = {{page.page_count}};
             var current_page = {{page.current_page}};
@@ -85,7 +85,9 @@
               </div>
                   <!--尾巴-->
                <!--<div class="bottom-seperator"></div>-->
+                  {% if not loop.last %}
                <div class="sep" style="margin: 0"><span class="left-arrow arrow"></span><span class="right-arrow arrow"></span></div>
+                  {% endif %}
           </article>
 
     {% endfor %}

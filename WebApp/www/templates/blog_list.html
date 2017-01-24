@@ -1,0 +1,75 @@
+{% extends '__base__.html' %}
+
+{% block title %}归档{% endblock%}
+
+{% block beforehead%}
+ <link rel="stylesheet" href="../static/css/archives/archive.css">
+<script src="../static/js/archives/archive.js"></script>
+<script>
+$(function () {
+      init();
+      var page_count = {{page.page_count}};
+      var current_page = {{page.current_page}};
+      addPage(page_count,current_page);
+      var pre_disable = true,
+          next_disable = true;
+      if ({{page.has_pre}}) {
+                pre_disable = false
+          }
+          if ({{page.has_next}}) {
+                next_disable = false
+          }
+      data = {
+                has_pre: pre_disable,
+                has_next: next_disable,
+      };
+      initVM(data);
+});
+
+    function initVM(data) {
+    vm = new Vue({
+        el: '#vm',
+        data:{
+         has_pre:data.has_pre,
+         has_next:data.has_next
+        },
+         methods: {
+            next_page: function () {
+                if({{page.current_page}}+ 1 <= {{page.page_count}}){
+                    location.assign('/archives/?page=' + ({{page.current_page}}+ 1));
+                }
+            },
+            pre_page: function () {
+                if({{page.current_page}}- 1 >= 1){
+                    location.assign('/archives/?page=' + ({{page.current_page}} - 1));
+                }
+         }
+        }
+    });
+    $('#vm').show();
+}
+</script>
+{% endblock %}
+
+{% block content%}
+ <div class="list-content">
+{% for blog in blogs %}
+     <div class="list">
+       <div class="left-line">
+           <div class="list-circle"></div>
+       </div>
+       <div class="right-title">
+         <p class="month-day">{{blog.created_at|month_day}}</p>
+         <a href="/blog/{{ blog.id }}">{{blog.name}}</a>
+       </div>
+
+   </div>
+ {% endfor %}
+</div>
+<nav class="page-nav" id="vm">
+  <ul class="pagination pagination-sm">
+    <li id="pre" v-bind:class="{ disabled: has_pre}" v-on:click="pre_page"><span>&laquo;</span></li>
+    <li id="next" v-bind:class="{ disabled: has_next}"  v-on:click="next_page"><span>&raquo;</span></li>
+  </ul>
+</nav>
+{% endblock %}

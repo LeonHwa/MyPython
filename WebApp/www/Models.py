@@ -22,10 +22,11 @@ class Blog(Model):
     __table__ = 'blogs'
     id = StringField(primary_key=True, default=next_id, column_type='varchar(50)')
     user_id = StringField(column_type='varchar(50)')
+    tag = StringField(column_type='varchar(50)')
     user_name = StringField(column_type='varchar(50)')
     user_image = StringField(column_type='varchar(500)')
     name = StringField(column_type='varchar(50)')
-    summary = StringField(column_type='varchar(200)')
+    summary = TextField()
     content = TextField()
     created_at = FloatField(default=time.time)
 

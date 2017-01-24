@@ -17,7 +17,7 @@ $(function () {
         $('.circle').remove();
         $('.nav-collapse ul li').each(function () {
             $(this).removeClass('active');
-        })
+        });
         $(this).addClass('active');
          addCircle('active');
     })

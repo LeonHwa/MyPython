@@ -132,6 +132,12 @@ def datetime_filter(t):
         return u'%s天前' % (delta // 86400)
     dt = datetime.fromtimestamp(t)
     return u'%s年%s月%s日' % (dt.year, dt.month, dt.day)
+def month_day_timeFilter(timestamp):
+    timeArray = time.localtime(timestamp)
+    # %Y-%m-%d %H:%M:%S"
+    month_day_time = time.strftime("%m-%d", timeArray)
+    return  month_day_time
+
 
 async def init(loop):
     await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='www-data', password='www-data', db='awesome')
@@ -139,7 +145,7 @@ async def init(loop):
         logger_factory,auth_factory,response_factory#三者是按顺序调用的
     ])
 
-    init_jinja2(app, filters=dict(datetime=datetime_filter))
+    init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter))
     add_routes(app, 'handlers')
     add_static(app)
     srv = await loop.create_server(app.make_handler(), '127.0.0.1',9000)
