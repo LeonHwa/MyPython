@@ -25,5 +25,18 @@ function addPage(page_count,current_page) {
 function init() {
      $('.nav-collapse ul li').each(function () {
             $(this).removeClass('active');
+            $('.circle').remove();
         });
+     $('#nav ul li').eq(1).addClass('active');
+      addCircle('active');
+     // $('.list').hover(function () {
+     //    $(this).css("background","red");
+     // });
 }
+ function addCircle (name) {
+      var act = document.getElementsByClassName(name)[0];
+      var para = document.createElement("div");
+      para.style.cssText = "border-radius: 50%; width: 6px;height: 6px; background: #c8c8c8;  display: inline-block; ";
+      para.className = "circle";
+      act.appendChild(para);
+    }

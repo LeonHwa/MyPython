@@ -53,6 +53,12 @@ $(function () {
 
 {% block content%}
  <div class="list-content">
+ <div class="list-header">
+     <div class="left-header-line">
+      <div class="list-header-circle"></div>
+     </div>
+     <span>好!目前共计 {{blogCount}} 篇日志。 继续努力。 </span>
+ </div>
 {% for blog in blogs %}
      <div class="list">
        <div class="left-line">

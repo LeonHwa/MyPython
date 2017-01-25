@@ -5,12 +5,18 @@
 
 {% block beforehead %}
    <link rel="stylesheet" href="../static/css/my_detail_blog.css">
-<script>
-</script>
+<style>
+    .DDDD{
+        width: 100px;
+        height: 100px;
+       background: url("../upload/blogs/imgae/fanders.jpg") repeat;
+    }
+</style>
 {% endblock %}
 
 
 {% block content %}
+
 <div class="header">
     <h2 id="title">{{blog.name}}</h2>
     <div class="sumary">
@@ -24,6 +30,7 @@
     </div>
 
 </div>
+<div  class="DDDD"></div>
 <div class="blog_detail_content" >
      {{blog.content|safe}}
 

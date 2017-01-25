@@ -20,13 +20,11 @@ class PageManager(object):
         elif blog_count%page_base == 0:
             self.page_count = int(blog_count/page_base)
 
+
         self.offset = (page_index - 1) * page_base
 
-        if page_index < self.page_count:
-            self.limit = page_base * self.current_page
-        elif page_index == self.page_count:
-              self.limit = (self.current_page - 1) * page_base
-        elif page_index > self.page_count:
+        self.limit = page_base
+        if page_index > self.page_count:
             self.limit = 0
 
         self.has_pre =  int(page_index > 1)

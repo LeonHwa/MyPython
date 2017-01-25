@@ -12,6 +12,7 @@ from coroweb import get, post
 from Models import User, Comment, Blog, next_id
 from  apis import APIValueError,APIError,APIPermissionError,PageManager
 
+import os
 COOKIE_NAME = 'awesession'
 _COOKIE_KEY = 'nkjnihyugyftff'
 
@@ -182,13 +183,15 @@ def editBlog(request):
 @get('/blog/{id}')
 async def get_detailBlog(id):
     blog = await Blog.find(id)
+    blogCount = await Blog.findNumber('count(id)')
     c1 = Comment(id='ssd',blog_id = 'hhhhhhh',created_at = '2222')
     c2 = Comment(id='ssd', blog_id='hhhhhhh',created_at = '2222')
     comments = [c1,c2]
     return {
         '__template__': 'blog.html',
         'blog': blog,
-        'comments': comments
+        'comments': comments,
+        'blogCount':blogCount
     }
 
 @get('/test')
@@ -198,6 +201,34 @@ def user_register(request):
 
     }
 
+@post('/upload/blogs/imgae/')
+async  def upload_image(request):
+    # data = await request.post()
+    # image_data = data['upload']
+    #
+    # filename = image_data.filename
+    # image_file = image_data.file
+    # image_content = image_file.read()
+    # logging.info(data)
+    # logging.info(filename)
+    # return web.Response(text='success:%s ' % filename)
+    reader = await request.multipart()
+    image_data = await reader.next()
+    filename = image_data.filename
+    size = 0
+    current_path = os.getcwd()
+    upload_path = str(current_path)+'/upload/blogs/imgae/'
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path)
+    with open(os.path.join(upload_path, filename), 'wb') as f:
+        while True:
+            chunk = await image_data.read_chunk()  # 8192 bytes by default.
+            if not chunk:
+                break
+            size += len(chunk)
+            f.write(chunk)
+
+    return web.Response(text='../upload/blogs/imgae/' + filename)
 # ######################################################------API--------#####################################################
 '''
 API

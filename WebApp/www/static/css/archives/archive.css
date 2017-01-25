@@ -6,9 +6,37 @@
     background: #FFF;
     padding: 60px;
 }
+.list-header{
+    /*background-color: yellow;*/
+    margin: 0;
+    padding: 0;
+}
+.left-header-line{
+    vertical-align:top;
+    display: inline-block;
+    background: #f5f5f5;
+    width: 5px;
+    height: 15px;
+    margin-top: 8px;
+}
+.list-header-circle{
+    margin-left: -2px;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background: #c8c8c8;
+}
+
+.list-header span{
+    vertical-align:top;
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 16px;
+}
+
 .list{
     height: 100%;
-      border-bottom: 1px dashed #aaaaaa;
+    border-bottom: 1px dashed #aaaaaa;
 }
 
 .left-line{

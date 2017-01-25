@@ -57,7 +57,8 @@ async def data_factory(app, handler):
             if request.content_type.startswith('application/json'):
                 request.__data__ = await request.json()
                 logging.info('request json: %s' % str(request.__data__))
-            elif request.content_type.startswith('application/x-www-form-urlencoded'):
+            #     multipart/form-data  是上传图片的数据
+            elif request.content_type.startswith('application/x-www-form-urlencoded')or request.content_type.startswith('multipart/form-data'):
                 request.__data__ = await request.post()
                 logging.info('request form: %s' % str(request.__data__))
         return (await handler(request))
@@ -148,8 +149,8 @@ async def init(loop):
     init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter))
     add_routes(app, 'handlers')
     add_static(app)
-    srv = await loop.create_server(app.make_handler(), '127.0.0.1',9000)
-    logging.info('server started at http://127.0.0.1:9000...')
+    srv = await loop.create_server(app.make_handler(), '127.0.0.1',7000)
+    logging.info('server started at http://127.0.0.1:7000...')
     return srv
 
 loop = asyncio.get_event_loop()
