@@ -138,6 +138,11 @@ def month_day_timeFilter(timestamp):
     # %Y-%m-%d %H:%M:%S"
     month_day_time = time.strftime("%m-%d", timeArray)
     return  month_day_time
+def standard_timeFilter(timestamp):
+    timeArray = time.localtime(timestamp)
+    # %Y-%m-%d %H:%M:%S"
+    month_day_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+    return  month_day_time
 
 
 async def init(loop):
@@ -146,7 +151,7 @@ async def init(loop):
         logger_factory,auth_factory,response_factory#三者是按顺序调用的
     ])
 
-    init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter))
+    init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter, standard_time= standard_timeFilter))
     add_routes(app, 'handlers')
     add_static(app)
     srv = await loop.create_server(app.make_handler(), '127.0.0.1',7000)

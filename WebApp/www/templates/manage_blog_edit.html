@@ -1,46 +1,27 @@
-<!DOCTYPE html>
-<!--
-Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
-For licensing, see LICENSE.md or http://ckeditor.com/license
--->
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>写文章-Leon</title>
-   <script src="/static/js/jquery.min.js"></script>
+{% extends '__blogManageBase__.html'%}
+{% block title %} 编辑文章-Leon {% endblock %}
 
-    <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
-    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
+{% block beforehead %}
+  <script>
 
-    <script src="/static/js/awesome.js"></script>
-
-    <script src="/static/ckeditor/ckeditor.js"></script>
-	<script src="/static/ckeditor/samples/js/sample.js"></script>
-	<link rel="stylesheet" href="/static/ckeditor/samples/css/samples.css">
-	<link rel="stylesheet" href="/static/ckeditor/samples/toolbarconfigurator/lib/codemirror/neo.css">
-
-    <script>
-
-       var action = '{{ action }}';
+       var     ID = '{{ id }}',
+               action = '{{ action }}';
 
       function validateForm() {
-          var title = document.forms["myForm"]["blogTitle"].value;
-          var content = CKEDITOR.instances.editor.getData();
-          var summary =  CKEDITOR.instances.sumary_editor.getData();
-           console.log('title = ' + title);
-           console.log(content);
-           console.log(summary)
-          var data = {
-            blogtitle: title,
-            blogsummary: summary,
-            blogcontent: content
-          };
+          var n_title = document.forms["myForm"]["blogTitle"].value;
+          var n_content = CKEDITOR.instances.editor.getData();
+          var n_summary =  CKEDITOR.instances.sumary_editor.getData();
 
-//          alert(content);
+          var data = {
+            name: n_title,
+            summary: n_summary,
+            content: n_content
+          };
           var $form = $('#myForm');
           $form.postJSON(action,data,function (err,r) {
+                  alert('请求');
                   if(!err){
-                          return location.assign('/api/blogs/' + r.id)
+                          return location.assign('/blog/' + r.id)
                   }else {
                       alert('错误')
                   }
@@ -48,43 +29,24 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 
           return false;
       }
+
    </script>
-</head>
-<body id="main">
+{% endblock %}
 
 
-<main>
-    <form id="myForm" name="myForm" onsubmit="return validateForm()" method="post">
-	<div class="header-top">
-		<h2>写文章</h2>
-        <h3  style="margin: 20px 0  10px 0">标题</h3>
-   </div>
-     <div class="submitContainer">
-            <input type="submit" value="发布文章">
-       </div>
-	<div class="blogTitle">
-        <input type="text" name="blogTitle" style="width: 100%">
-    </div>
+{% block action %}
+  <input type="submit" value="确认修改">
+{% endblock %}
 
-	<div class="adjoined-bottom">
-		<div class="grid-container">
-			<div class="grid-width-100">
-                <h2 style="margin: 0px 0  10px 0">简介</h2>
-                <div id="sumary_editor">
-				</div>
-                 <h2 style="margin: 0px 0  10px 0">内容</h2>
-				<div id="editor">
-				</div>
-			</div>
-		</div>
-	</div >
 
-    </form>
-</main>
-
-<script>
- 	initSample();
-</script>
-
-</body>
-</html>
+{% block content %}
+ <script>
+              getJSON("/api/blogs/"+ ID,function (err,blog) {
+             if(blog){
+                document.forms["myForm"]["blogTitle"].value = blog["blog"].name;
+                CKEDITOR.instances.sumary_editor.setData(blog["blog"].summary);
+                CKEDITOR.instances.editor.setData(blog["blog"].content);
+             }
+         });
+ </script>
+{% endblock %}

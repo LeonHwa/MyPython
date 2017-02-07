@@ -174,32 +174,49 @@ def signout(request):
 @get('/manager/blog/create')
 def editBlog(request):
     return {
-            '__template__': 'manage_blog_edit.html',
+            '__template__': 'manage_blog_create.html',
             'id': '',
             'action': '/api/blogs'
     }
+#修改博客
+@get('/manage/blogs/edit')
+def manage_edit_blog(*, id):
+    return {
+        '__template__': 'manage_blog_edit.html',
+        'id': id,
+        'action': '/api/blogs/%s' % id
+    }
 
+#可编辑博客列表
+@get('/manager/blogs')
+async def manage_blogs(*, page='1'):
+    page_index = get_page_index(page)
+    blogCount = await Blog.findNumber('count(id)')
+    page = PageManager(blogCount, page_index)
+    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
 
+    return {
+        '__template__': 'manage_blogs.html',
+        'blogCount': blogCount,
+        'page_index': page_index,
+        'page': page,
+        'blogs': blogs
+    }
 @get('/blog/{id}')
-async def get_detailBlog(id):
+async def get_detailBlog(request,*,id):
     blog = await Blog.find(id)
     blogCount = await Blog.findNumber('count(id)')
-    c1 = Comment(id='ssd',blog_id = 'hhhhhhh',created_at = '2222')
-    c2 = Comment(id='ssd', blog_id='hhhhhhh',created_at = '2222')
-    comments = [c1,c2]
+    if not request.__user__:
+       blog.scan_count = blog.scan_count + 1
+       logging.info("加了")
+       await blog.update()
     return {
         '__template__': 'blog.html',
         'blog': blog,
-        'comments': comments,
         'blogCount':blogCount
     }
 
-@get('/test')
-def user_register(request):
-    return {
-        '__template__':'test.html'
 
-    }
 
 @post('/upload/blogs/imgae/')
 async  def upload_image(request):
@@ -229,6 +246,12 @@ async  def upload_image(request):
             f.write(chunk)
 
     return web.Response(text='../upload/blogs/imgae/' + filename)
+
+@get('/manage')
+def manage(request):
+    return {
+        '__template__': 'manage.html',
+    }
 # ######################################################------API--------#####################################################
 '''
 API
@@ -257,6 +280,24 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
     logging.info(blogcontent);
     return blog
 
+
+#修改博客
+@post('/api/blogs/{id}')
+async def api_update_blog(id, request, *, name, summary, content):
+    check_admin(request)
+    blog = await Blog.find(id)
+    if not name or not name.strip():
+        raise APIValueError('name', 'name cannot be empty.')
+    if not summary or not summary.strip():
+        raise APIValueError('summary', 'summary cannot be empty.')
+    if not content or not content.strip():
+        raise APIValueError('content', 'content cannot be empty.')
+    blog.name = name.strip()
+    blog.summary = summary.strip()
+    blog.content = content.strip()
+    await blog.update()
+    return blog
+
 def check_admin(request):
     if request.__user__ is None or not request.__user__.admin:
         raise APIPermissionError()
@@ -272,6 +313,11 @@ def check_admin(request):
 @get('/api/blogs/{id}')
 async def get_blog(request,*,id):
     blog = await Blog.find(id)
-    logging.info('调用  blog')
-    logging.info(blog)
     return dict(blog = blog)
+
+@post('/api/blogs/{id}/delete')
+async def api_delete_blog(request, *, id):
+    check_admin(request)
+    blog = await  Blog.find(id)
+    await blog.remove()
+    return dict(id=id)

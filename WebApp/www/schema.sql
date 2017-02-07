@@ -23,6 +23,7 @@ create table users (
 
 create table blogs (
     `id` varchar(50) not null,
+    `scan_count` bigint not null,
     `user_id` varchar(50) not null,
     `tag` varchar(50) not null,
     `user_name` varchar(50) not null,

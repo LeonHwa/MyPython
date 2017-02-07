@@ -64,7 +64,8 @@ aside{
 }
 .avatar a{
   display: block;/*加上之后 图片才出来 ,奇怪*/
-  background: url("../images/Russell.jpg") repeat;
+    /*"../../upload/blogs/imgae/444.jpg"*/
+  background: url("../../upload/blogs/imgae/Russell.jpg") repeat;
   background-size: 120px 120px;
   width: 120px;
   height: 120px;

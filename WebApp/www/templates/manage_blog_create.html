@@ -1,0 +1,41 @@
+{% extends '__blogManageBase__.html'%}
+{% block title %} 写文章-Leon {% endblock %}
+
+{% block beforehead %}
+  <script>
+
+       var action = '{{ action }}';
+
+      function validateForm() {
+          var title = document.forms["myForm"]["blogTitle"].value;
+          var content = CKEDITOR.instances.editor.getData();
+          var summary =  CKEDITOR.instances.sumary_editor.getData();
+           console.log('title = ' + title);
+           console.log(content);
+           console.log(summary);
+          var data = {
+            blogtitle: title,
+            blogsummary: summary,
+            blogcontent: content
+          };
+
+          var $form = $('#myForm');
+          $form.postJSON(action,data,function (err,r) {
+                  if(!err){
+                          return location.assign('/api/blogs/' + r.id)
+                  }else {
+                      alert('错误')
+                  }
+             });
+
+          return false;
+      }
+   </script>
+{% endblock %}
+
+{% block action %}
+  <input type="submit" value="发布文章">
+{% endblock %}
+
+{% block content %}
+{% endblock %}

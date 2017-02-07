@@ -21,19 +21,14 @@
     <h2 id="title">{{blog.name}}</h2>
     <div class="sumary">
         <p>发表于{{blog.created_at|datetime }}</p>
-        {% if comments %}
-        <p> {{comments|length}}条评论</p>
-        {% else %}
-        <p>暂无评论</p>
-        {%  endif %}
-        <p>浏览次数 0</p>
+        <p> <span class="ds-thread-count" data-thread-key={{blog.id}}></span></p>
+        <p>浏览次数 {{blog.scan_count}}</p>
     </div>
 
 </div>
 <div  class="DDDD"></div>
 <div class="blog_detail_content" >
      {{blog.content|safe}}
-
 </div>
 
 

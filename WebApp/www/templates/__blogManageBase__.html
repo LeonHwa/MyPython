@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %} ? {% endblock %}</title>
+       <script src="/static/js/jquery.min.js"></script>
+
+    <link rel="stylesheet"  href="/static/bootStrap/css/bootstrap.min.css">
+    <script  src="/static/bootStrap/js/bootstrap.min.js"></script>
+
+    <script src="/static/js/awesome.js"></script>
+
+    <script src="/static/ckeditor/ckeditor.js"></script>
+	<script src="/static/ckeditor/samples/js/sample.js"></script>
+	<link rel="stylesheet" href="/static/ckeditor/samples/css/samples.css">
+	<link rel="stylesheet" href="/static/ckeditor/samples/toolbarconfigurator/lib/codemirror/neo.css">
+
+    {% block beforehead %} {% endblock %}
+</head>
+<body id="main">
+  <main>
+    <form id="myForm" name="myForm" onsubmit="return validateForm()" method="post">
+	<div class="header-top">
+		<h2>写文章</h2>
+        <h3  style="margin-top: 20px">标题</h3>
+   </div>
+     <div class="submitContainer">
+           {% block action %}
+           {% endblock %}
+       </div>
+	<div class="blogTitle">
+        <input   type="text" name="blogTitle" style="width: 100%">
+    </div>
+
+	<div class="adjoined-bottom">
+		<div class="grid-container">
+			<div class="grid-width-100">
+                <h2 style="margin-top: 20px">简介</h2>
+                <div id="sumary_editor">
+				</div>
+                 <h2 style="margin: 0px 0  10px 0">内容</h2>
+				<div id="editor">
+				</div>
+			</div>
+		</div>
+	</div >
+
+    </form>
+</main>
+
+<script>
+ 	initSample();
+</script>
+   {% block content %}
+    {% endblock %}
+</body>
+</html>

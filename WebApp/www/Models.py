@@ -3,7 +3,7 @@
 
 import time,uuid
 
-from  orm import  Model,StringField,BooleanField,TextField,FloatField
+from  orm import  Model,StringField,BooleanField,TextField,FloatField,IntegerField
 
 def next_id():
     return '%015d%s000' %(int(time.time()) * 1000,uuid.uuid4().hex)
@@ -29,6 +29,7 @@ class Blog(Model):
     summary = TextField()
     content = TextField()
     created_at = FloatField(default=time.time)
+    scan_count = IntegerField()
 
 class Comment(Model):
     __table__  = 'comments'

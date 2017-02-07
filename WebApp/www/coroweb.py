@@ -52,6 +52,8 @@ def get(path):
 def add_static(app):
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
     app.router.add_static('/static/', path)
+    path2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'upload')
+    app.router.add_static('/static/', path2)
     logging.info('add static %s => %s' % ('/static/', path))
 
 def get_required_kw_args(fn):#  如果参数如: e   返回 e

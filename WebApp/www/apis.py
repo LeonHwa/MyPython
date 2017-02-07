@@ -10,7 +10,7 @@ JSON API definition.
 import json, logging, inspect, functools
 
 class PageManager(object):
-    def __init__(self,blog_count,page_index = 1,page_base = 3):
+    def __init__(self,blog_count,page_index = 1,page_base = 6):
         self.blog_count = blog_count
         self.current_page = page_index
         if blog_count%page_base != 0 and blog_count > page_base:
