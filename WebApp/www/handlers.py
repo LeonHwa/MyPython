@@ -31,13 +31,16 @@ async def index(*,page = '1'):
     blogCount = await Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+    admins = await User.findAll('admin = 1')
+    admin = admins[0]
     # jinja2
     return {
         '__template__': 'blogs.html',
         'blogCount':blogCount,
         'page_index' : page_index,
          'page':page,
-         'blogs':blogs
+         'blogs':blogs,
+         'admin':admin
     }
 
 @get('/register')
@@ -57,12 +60,15 @@ async def  archives(*,page = '1'):
     blogCount = await Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index,page_base = 6)
     blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+    admins = await User.findAll('admin = 1')
+    admin = admins[0]
     return {
         '__template__':'blog_list.html',
         'blogCount': blogCount,
         'page_index': page_index,
         'page': page,
-        'blogs': blogs
+        'blogs': blogs,
+        'admin': admin
     }
 
 @post('/api/authenticate')
@@ -206,9 +212,8 @@ async def manage_blogs(*, page='1'):
 async def get_detailBlog(request,*,id):
     blog = await Blog.find(id)
     blogCount = await Blog.findNumber('count(id)')
-    if not request.__user__:
+    if not request.__user__.admin:
        blog.scan_count = blog.scan_count + 1
-       logging.info("加了")
        await blog.update()
     return {
         '__template__': 'blog.html',
@@ -247,10 +252,14 @@ async  def upload_image(request):
 
     return web.Response(text='../upload/blogs/imgae/' + filename)
 
-@get('/manage')
-def manage(request):
+@get('/manager')
+def manager(request):
+    admin = None
+    if request.__user__.admin:
+        admin = request.__user__
     return {
         '__template__': 'manage.html',
+        'admin' : admin
     }
 # ######################################################------API--------#####################################################
 '''
@@ -321,3 +330,17 @@ async def api_delete_blog(request, *, id):
     blog = await  Blog.find(id)
     await blog.remove()
     return dict(id=id)
+
+
+@post('/manager/{id}')
+async def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescription,githubSite):
+     user = await User.find(id)
+     if user:
+       user.image = image
+       user.blogName = blogName
+       user.blogDescription = blogDescription
+       user.ownName = ownName
+       user.ownDescription = ownDescription
+       user.githubSite = githubSite
+       await  user.update()
+

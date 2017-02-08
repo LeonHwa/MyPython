@@ -1,0 +1,40 @@
+body{
+    padding: 20px;
+}
+
+/*.avatar{*/
+    /*!*padding: 10px;*!*/
+   /*margin: 10px auto;*/
+    /*width: 120px;*/
+    /*height: 160px;*/
+/*}*/
+
+.form-group input{
+    width: 100%;
+    height: 36px;
+}
+.myInfo{
+    background-color: #f5e9d1;
+    border-radius: 6px 6px 6px 6px;
+    padding: 30px;
+}
+.avatar{
+    margin-left: 40%;
+}
+.avatar a{
+  display: block;/*加上之后 图片才出来 ,奇怪*/
+  /*"../../upload/blogs/imgae/444.jpg"*/
+  background: url("../../images/Russell.jpg") no-repeat;
+  background-size: 120px 120px;
+  /*width: 100%;*/
+    height: 120px;
+}
+label{
+    margin-top:10px;
+    font-size: 16px;
+}
+
+button{
+    background-color: #76b430;
+    width: 100%;
+}

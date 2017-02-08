@@ -18,6 +18,12 @@ class User(Model):
     image = StringField(column_type='varchar(500)')
     created_at = FloatField(default=time.time)
 
+    blogName = StringField(column_type='varchar(50)')
+    blogDescription = StringField(column_type='varchar(250)')
+    ownName = StringField(column_type='varchar(50)')
+    ownDescription = StringField(column_type='varchar(250)')
+    githubSite = StringField(column_type='varchar(500)')
+
 class Blog(Model):
     __table__ = 'blogs'
     id = StringField(primary_key=True, default=next_id, column_type='varchar(50)')
@@ -40,3 +46,4 @@ class Comment(Model):
     user_image = StringField(column_type='varchar(500)')
     content = TextField()
     created_at = StringField(default=time.time())
+

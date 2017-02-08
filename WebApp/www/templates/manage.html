@@ -3,8 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Leon 个人信息</title>
+    <script src="../static/js/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="../static/bootStrap/css/bootstrap.min.css">
+    <script  src="../static/bootStrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../static/css/manage/manage.css">
+    <script src="../static/js/vue.min.js"></script>
+    <script src="../static/js/awesome.js"></script>
+    <script>
+     var   ID = '{{admin.id}}';
+
+     $(function () {
+         var vm = new  Vue({
+          el:'#vm',
+          data:{
+            blogName :'{{admin.blogName}}',
+            blogDescription :'{{admin.blogDescription}}',
+            ownName :'{{admin.ownName}}',
+            ownDescription :'{{admin.ownDescription}}',
+            githubSite :'{{admin.githubSite}}'
+          },
+           methods:{
+               submit:function (event) {
+                   event.preventDefault();
+                   var $form = $('#vm');
+                   var blogName = this.blogName.trim();
+                   var blogDescription = this.blogDescription.trim();
+                   var ownName = this.ownName.trim();
+                   var ownDescription = this.ownDescription.trim();
+                   var githubSite = this.githubSite.trim();
+                   var sendData = {
+                        image:'00',
+                        blogName :blogName,
+                        blogDescription :blogDescription,
+                        ownName :ownName,
+                        ownDescription :ownDescription,
+                        githubSite :githubSite
+                   };
+                   $form.postJSON('/manager/' + ID , sendData, function(result) {
+                        if (result) {
+                           return location.assign('/');
+                        }
+                   });
+               }
+           }
+
+         });
+          $('#vm').show()
+     });
+    </script>
+
 </head>
 <body>
+ <div class="container">
+   <div class="row">
+       <div class="myInfo col-sm-6 col-sm-offset-3">
+          <form id="vm" role="form"  method="post">
+          <div class="avatar ">
+            <a href="#"></a>
+            <input type="file">
+          </div>
+          <div class="form-group">
+             <label for="blogName">博客名称</label>
+             <input v-model = "blogName" type="text" class="form-control" id="blogName" placeholder="博客名称" value>
+          </div>
+          <div class="form-group">
+             <label for="blogDescription">博客描述</label>
+             <input v-model = "blogDescription" type="text" class="form-control" id="blogDescription" placeholder="博客描述">
+          </div>
+          <div class="form-group">
+             <label for="ownName">名字</label>
+             <input v-model = "ownName"  type="text" class="form-control" id="ownName" placeholder="名字">
+          </div>
+          <div class="form-group">
+             <label for="ownDescription">个人描述</label>
+             <input v-model = "ownDescription"  type="text" class="form-control" id="ownDescription" placeholder="个人描述">
+          </div>
+          <div class="form-group">
+             <label for="githubSite">github链接</label>
+             <input v-model = "githubSite"  type="text" class="form-control" id="githubSite" placeholder="github链接">
+          </div>
+          <div class="form-group">
+             <button  v-on:click ="submit" type="submit" class="btn"  >保存</button>
+          </div>
+          </form>
+       </div>
+   </div>
+ </div>
+
 
 </body>
 </html>

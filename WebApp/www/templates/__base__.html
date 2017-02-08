@@ -30,8 +30,8 @@
        <div class="left-box">
            <aside >
                <section class="topspaceinfo">
-                   <h1>Leon Hwa'blog</h1>
-                   <p>电子信息工程专业 iOS developer</p>
+                   <h1>{{admin.blogName|safe}}</h1>
+                   <p>{{admin.blogDescription|safe}}</p>
                </section>
                <div role="navigation" id="nav" class="nav-collapse">
                    <ul>
@@ -48,8 +48,8 @@
                    </div>
 
                     <div class="userInfo">
-                      <p id="name">华玉凡</p>
-                      <p class="description">xxx</p>
+                      <p id="name">{{admin.ownName|safe}}</p>
+                      <p class="description">{{admin.ownDescription|safe}}</p>
                     </div>
                     <section class="blogerInfo">
                        <div>
@@ -63,7 +63,7 @@
                        </div>
                     </section>
                     <div class="githublink">
-                       <a href="#">Github</a>
+                       <a href="{{admin.githubSite|safe}}">Github</a>
                     </div>
                     <div class="outLink">
                        <span class="glyphicon glyphicon-globe" style="margin-top: 10px"> Links</span>
