@@ -38,3 +38,16 @@ button{
     background-color: #76b430;
     width: 100%;
 }
+
+/*#upload{*/
+    /*visibility: hidden;*/
+/*}*/
+
+#uploadBtn{
+    width: 100px;
+    height: 40px;
+    background-color: #FFF;
+    border-radius: 6px;
+    box-shadow: none;
+    border-color: #76b430;
+}

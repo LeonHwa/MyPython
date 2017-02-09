@@ -200,13 +200,15 @@ async def manage_blogs(*, page='1'):
     blogCount = await Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
-
+    admins = await User.findAll('admin = 1')
+    admin = admins[0]
     return {
         '__template__': 'manage_blogs.html',
         'blogCount': blogCount,
         'page_index': page_index,
         'page': page,
-        'blogs': blogs
+        'blogs': blogs,
+        'admin':admin
     }
 @get('/blog/{id}')
 async def get_detailBlog(request,*,id):
@@ -215,10 +217,13 @@ async def get_detailBlog(request,*,id):
     if not request.__user__.admin:
        blog.scan_count = blog.scan_count + 1
        await blog.update()
+    admins = await User.findAll('admin = 1')
+    admin = admins[0]
     return {
         '__template__': 'blog.html',
         'blog': blog,
-        'blogCount':blogCount
+        'blogCount':blogCount,
+        'admin':admin
     }
 
 
@@ -238,8 +243,7 @@ async  def upload_image(request):
     image_data = await reader.next()
     filename = image_data.filename
     size = 0
-    current_path = os.getcwd()
-    upload_path = str(current_path)+'/upload/blogs/imgae/'
+    upload_path = '/upload/blogs/imgae/'
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
     with open(os.path.join(upload_path, filename), 'wb') as f:
@@ -252,6 +256,27 @@ async  def upload_image(request):
 
     return web.Response(text='../upload/blogs/imgae/' + filename)
 
+@post('/upload/icon')
+async def upload_icon(request):
+    reader = await request.multipart()
+    image_data = await reader.next()
+    filename = image_data.filename
+    logging.info(image_data)
+    size = 0
+    upload_path = '/upload/adminIcon/'
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path)
+    with open(os.path.join(upload_path, filename), 'wb') as f:
+        while True:
+            chunk = await image_data.read_chunk()  # 8192 bytes by default.
+            if not chunk:
+                break
+            size += len(chunk)
+            f.write(chunk)
+    admins = await User.findAll('admin = 1')
+    admin = admins[0]
+    admin.image = os.path.join('../upload/adminIcon/', filename)
+    await  admin.update()
 @get('/manager')
 def manager(request):
     admin = None

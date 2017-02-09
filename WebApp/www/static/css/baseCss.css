@@ -6,6 +6,7 @@
 img{
   border: 0;
   vertical-align: middle;
+    max-width: 600px;
 }
 ul{
   list-style: none;
@@ -62,14 +63,13 @@ aside{
   height:120px;
   overflow: hidden;
 }
-.avatar a{
-  display: block;/*加上之后 图片才出来 ,奇怪*/
-    /*"../../upload/blogs/imgae/444.jpg"*/
-  background: url("../../upload/blogs/imgae/Russell.jpg") repeat;
+.avatar .avatarImg{
+
   background-size: 120px 120px;
-  width: 120px;
-  height: 120px;
+  max-width: 120px;
+  /*height: 120px;*/
 }
+
 
 
 
