@@ -52,3 +52,12 @@ create table comments (
     key `idx_created_at` (`created_at`),
     primary key (`id`)
 ) engine=innodb default charset=utf8;
+
+create table tags (
+    `id` varchar(50) not null,
+    `tag` varchar(80) not null,
+    `created_at` real not null,
+    `blog_ids` mediumtext not null,
+    key `idx_created_at` (`created_at`),
+    primary key (`id`)
+) engine=innodb default charset=utf8;

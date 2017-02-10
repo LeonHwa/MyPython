@@ -1,7 +1,14 @@
+body{
+    background-color: transparent;
+}
 .active span{
 
 }
 
+
+
 .pagination li{
     background: #000;
 }
+
+

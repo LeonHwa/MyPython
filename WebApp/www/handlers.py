@@ -32,7 +32,9 @@ async def index(*,page = '1'):
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     admins = await User.findAll('admin = 1')
-    admin = admins[0]
+    admin = None
+    if  len(admins):
+      admin = admins[0]
     # jinja2
     return {
         '__template__': 'blogs.html',
@@ -45,9 +47,13 @@ async def index(*,page = '1'):
 
 @get('/register')
 async def user_registers(request):
+    admins = await User.findAll('admin = 1')
+    admin = None
+    if len(admins):
+        admin = admins[0]
     return {
-        '__template__':'register.html'
-
+        '__template__':'register.html',
+        'admin': admin
     }
 
 
@@ -61,7 +67,9 @@ async def  archives(*,page = '1'):
     page = PageManager(blogCount, page_index,page_base = 6)
     blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
     admins = await User.findAll('admin = 1')
-    admin = admins[0]
+    admin = None
+    if not len(admins):
+        admin = admins[0]
     return {
         '__template__':'blog_list.html',
         'blogCount': blogCount,
@@ -201,7 +209,9 @@ async def manage_blogs(*, page='1'):
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     admins = await User.findAll('admin = 1')
-    admin = admins[0]
+    admin = None
+    if not len(admins):
+        admin = admins[0]
     return {
         '__template__': 'manage_blogs.html',
         'blogCount': blogCount,
@@ -218,7 +228,9 @@ async def get_detailBlog(request,*,id):
        blog.scan_count = blog.scan_count + 1
        await blog.update()
     admins = await User.findAll('admin = 1')
-    admin = admins[0]
+    admin = None
+    if not len(admins):
+        admin = admins[0]
     return {
         '__template__': 'blog.html',
         'blog': blog,
@@ -299,9 +311,10 @@ async  def get_api_blogs(*,page= '1'):
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     return  dict(blogs = blogs,page = page,page_index = page_index)
-#保存博客
+
+#创建博客
 @post('/api/blogs')
-async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
+async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
     # check_admin(request)
     if not blogtitle or not blogtitle.strip():
         raise APIValueError('name', 'name cannot be empty.')
@@ -311,7 +324,7 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent):
         raise APIValueError('content', 'content cannot be empty.')
     blog = Blog(tag = '开发',user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
     await  blog.save()
-    logging.info(blogcontent);
+    logging.info(blogcontent)
     return blog
 
 

@@ -27,12 +27,13 @@ a:hover{
 
 body{
   /*background: #f5f7f9;*/
-  background: #f5f7f9;
   text-decoration: none;
   /*font: 12px "宋体", "Arial Narrow", HELVETICA;*/
   font-family: Arial, Helvetica, sans-serif;
   color: #3F3E3C;
   line-height: 1.5;
+  background: #444 url("../../static/images/bg4.jpg") repeat ;
+  background-size: contain;
 }
 .topLine{
     width: 100%;
@@ -49,28 +50,13 @@ body{
 .left-box{
   float: left;
   width: 240px;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 
 aside{
   width: 100%;
 }
-
-.avatar{
-  margin:24px auto;/*auto 后就居中了*/
-  width: 120px;
-  height:120px;
-  overflow: hidden;
-}
-.avatar .avatarImg{
-
-  background-size: 120px 120px;
-  max-width: 120px;
-  /*height: 120px;*/
-}
-
-
 
 
 
@@ -84,7 +70,9 @@ aside{
   font-size: 16px;
   line-height: 40px;/*间距?*/
 }
-
+.nav-collapse {
+    background-color: #FFF;
+}
 .nav-collapse ul{
   padding-bottom: 20px;
   padding-top: 20px;
@@ -115,11 +103,25 @@ aside{
 .active{
   background:#f9f9f9;
 }
-.seperator{
-  background-color: #f5f7f9;
-  width: 100%;
-  height: 10px;
 
+
+.pinContainer{
+    background-color: #fff;
+    padding-top: 20px;
+}
+.avatar{
+  margin:6px auto;/*auto 后就居中了*/
+  width: 120px;
+  height:120px;
+  overflow: hidden;
+}
+.avatar .avatarImg{
+
+  background-size: 120px 120px;
+  /*max-width: 120px;*/
+  width: 100%;
+  height: 100%;
+  /*height: 120px;*/
 }
 .userInfo {
   margin-top: 20px;
@@ -212,15 +214,16 @@ section div span a{
   /*background-color: #FFFFB6;*/
   padding: 0;
     margin: 0;
-      border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+      /*border-top-left-radius: 12px;*/
+  /*border-bottom-left-radius: 12px;*/
+  /*border-top-right-radius: 12px;*/
+  /*border-bottom-right-radius: 12px;*/
     overflow: hidden;
 }
 article{
     background-color: #FFF;
     padding-top: 20px;
+    margin: 0;
 }
 
 .blog-header{
@@ -254,10 +257,12 @@ article{
 }
 
 .textFoot {
-  padding:10px 60px;
-  margin: 40px 0;
-  /*box-shadow:#999 2px 2px 3px  ;*/
+  padding-bottom: 20px;
   text-align: center;
+  margin-top:40px;
+}
+.textFoot:last-child{
+    padding-bottom: 60px;
 }
 
 .textFoot a{
@@ -297,13 +302,13 @@ article{
 	left: 0;
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-left: 10px solid #f5f7f9;
+	border-left: 10px solid #d8d7d2;
 }
 .sep .right-arrow {
 	right: 0;
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-right:10px solid #f5f7f9;
+	border-right:10px solid #cecdc9;
 }
 /******************Footer*********************/
 footer{

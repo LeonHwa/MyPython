@@ -1,6 +1,7 @@
 {% extends '__blogManageBase__.html'%}
 {% block title %} 写文章-Leon {% endblock %}
 
+
 {% block beforehead %}
   <script>
 
@@ -10,13 +11,15 @@
           var title = document.forms["myForm"]["blogTitle"].value;
           var content = CKEDITOR.instances.editor.getData();
           var summary =  CKEDITOR.instances.sumary_editor.getData();
+          var tags =  $('#tag').val();
            console.log('title = ' + title);
            console.log(content);
            console.log(summary);
           var data = {
             blogtitle: title,
             blogsummary: summary,
-            blogcontent: content
+            blogcontent: content,
+            tags : tags
           };
 
           var $form = $('#myForm');
@@ -31,6 +34,7 @@
           return false;
       }
    </script>
+
 {% endblock %}
 
 {% block action %}
@@ -38,4 +42,5 @@
 {% endblock %}
 
 {% block content %}
+
 {% endblock %}

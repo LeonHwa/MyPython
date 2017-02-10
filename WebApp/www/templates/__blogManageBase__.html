@@ -17,6 +17,13 @@
 	<link rel="stylesheet" href="/static/ckeditor/samples/toolbarconfigurator/lib/codemirror/neo.css">
 
     {% block beforehead %} {% endblock %}
+
+   <style>
+       #tag{
+           margin-top: 30px;
+           width: 100%;
+       }
+   </style>
 </head>
 <body id="main">
   <main>
@@ -48,7 +55,9 @@
 
     </form>
 </main>
-
+<div class="grid-width-100">
+  <input id="tag" type="text" placeholder="tag..." >
+</div>
 <script>
  	initSample();
 </script>

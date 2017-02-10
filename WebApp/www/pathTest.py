@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import  os
-print(os.path.dirname(os.path.abspath(__file__)))
+import  re
+# w = 'foolsdFoolsnbiFoo3'
+# ans = re.findall('(?i)(foo.)',w)
+# print(ans)
+
+m = re.match(r'c','canjcjv')
+print(m.group(0))
+
