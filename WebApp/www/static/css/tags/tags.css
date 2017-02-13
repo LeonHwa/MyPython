@@ -1,0 +1,18 @@
+.tags-container{
+    background: #FFF;
+    padding-top: 60px;
+}
+
+.header{
+    /*align-content: center;*/
+    padding: 20px;
+}
+.header h2{
+    width: 100%;
+    text-align: center;
+}
+.header h5{
+    margin-top:20px;
+    width: 100%;
+    text-align: center;
+}

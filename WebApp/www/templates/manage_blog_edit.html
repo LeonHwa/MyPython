@@ -11,11 +11,12 @@
           var n_title = document.forms["myForm"]["blogTitle"].value;
           var n_content = CKEDITOR.instances.editor.getData();
           var n_summary =  CKEDITOR.instances.sumary_editor.getData();
-
+          var tags =  $('#tag').val();
           var data = {
             name: n_title,
             summary: n_summary,
-            content: n_content
+            content: n_content,
+            tags : tags
           };
           var $form = $('#myForm');
           $form.postJSON(action,data,function (err,r) {
@@ -46,6 +47,7 @@
                 document.forms["myForm"]["blogTitle"].value = blog["blog"].name;
                 CKEDITOR.instances.sumary_editor.setData(blog["blog"].summary);
                 CKEDITOR.instances.editor.setData(blog["blog"].content);
+                 $('#tag').val(blog['blog'].tag)
              }
          });
  </script>

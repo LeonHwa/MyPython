@@ -1,0 +1,26 @@
+{% extends '__base__.html' %}
+
+{% block title %} 标签 {% endblock %}
+
+
+{% block beforehead %}
+
+<link rel="stylesheet" href="../static/css/tags/tags.css">
+{% endblock %}
+
+
+{% block content %}
+<div class="tags-container">
+
+  <div class="header">
+      <h2 class="title">All tags</h2>
+      <h5>共计{{tags|length}}个标签</h5>
+  </div>
+
+
+{% for tag in tags%}
+ <a>{{tag.tag}}</a>
+{% endfor %}
+
+</div>
+{% endblock %}

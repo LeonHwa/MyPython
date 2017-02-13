@@ -48,7 +48,7 @@ class Comment(Model):
     created_at = StringField(default=time.time())
 
 class Tag(Model):
-    __table__ = 'tag'
+    __table__ = 'tags'
     id  = StringField(primary_key=True, default=next_id, column_type='varchar(50)')
     tag = StringField(column_type='varchar(80)')
     created_at = FloatField(default=time.time)

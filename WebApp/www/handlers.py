@@ -9,7 +9,7 @@ import re, time, json, logging, hashlib, base64, asyncio
 from aiohttp import web
 from coroweb import get, post
 
-from Models import User, Comment, Blog, next_id
+from Models import User, Comment, Blog,Tag, next_id
 from  apis import APIValueError,APIError,APIPermissionError,PageManager
 
 import os
@@ -68,7 +68,7 @@ async def  archives(*,page = '1'):
     blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
     admins = await User.findAll('admin = 1')
     admin = None
-    if not len(admins):
+    if  len(admins):
         admin = admins[0]
     return {
         '__template__':'blog_list.html',
@@ -78,59 +78,20 @@ async def  archives(*,page = '1'):
         'blogs': blogs,
         'admin': admin
     }
-
-@post('/api/authenticate')
-async def authenticate(*, email, passwd):
-    if not email:
-        raise APIValueError('email', 'Invalid email.')
-    if not passwd:
-        raise APIValueError('passwd', 'Invalid password.')
-    users = await User.findAll('email=?', [email])
-    if len(users) == 0:
-        raise APIValueError('email', 'Email not exist.')
-    else:
-        logging.info('找到用户')
-    user = users[0]
-    # check passwd:
-    sha1 = hashlib.sha1()
-    sha1.update(user.id.encode('utf-8'))
-    sha1.update(b':')
-    sha1.update(passwd.encode('utf-8'))
-    if user.passwd != sha1.hexdigest():
-        raise APIValueError('passwd', 'Invalid password.')
-    # authenticate ok, set cookie:
-    r = web.Response()
-    r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
-    logging.info('设置cookie成功')
-    user.passwd = '******'
-    r.content_type = 'application/json'
-    r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
-    return r
-
-
-# 注册
-@post('/api/users')
-async def api_register_user(*, email, name, passwd):
-    if not name or not name.strip():
-        raise APIValueError('name')
-    if not email or not _RE_EMAIL.match(email):
-        raise APIValueError('email')
-    if not passwd or not _RE_SHA1.match(passwd):
-        raise APIValueError('passwd')
-    users = await User.findAll('email=?', [email])
-    if len(users) > 0:
-        raise APIError('register:failed', 'email', 'Email is already in use.')
-    uid = next_id()
-    sha1_passwd = '%s:%s' % (uid, passwd)
-    user = User(id=uid, name=name.strip(), email=email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), image='http://www.gravatar.com/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest())
-    await user.save()
-    # make session cookie:
-    r = web.Response()
-    r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
-    user.passwd = '******'
-    r.content_type = 'application/json'
-    r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
-    return r
+@get('/tag')
+async def  tags(request):
+    blogCount = await Blog.findNumber('count(id)')
+    admins = await User.findAll('admin = 1')
+    admin = None
+    if len(admins):
+        admin = admins[0]
+    tags = await  Tag.findAll()
+    return {
+        '__template__': 'tags.html',
+        'blogCount': blogCount,
+        'admin': admin,
+        'tags': tags,
+    }
 
 @get('/signin')
 def user_sigin(request):
@@ -210,7 +171,7 @@ async def manage_blogs(*, page='1'):
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     admins = await User.findAll('admin = 1')
     admin = None
-    if not len(admins):
+    if len(admins):
         admin = admins[0]
     return {
         '__template__': 'manage_blogs.html',
@@ -224,12 +185,16 @@ async def manage_blogs(*, page='1'):
 async def get_detailBlog(request,*,id):
     blog = await Blog.find(id)
     blogCount = await Blog.findNumber('count(id)')
-    if not request.__user__.admin:
+    user = request.__user__
+    if not user:
        blog.scan_count = blog.scan_count + 1
        await blog.update()
+    elif user.admin == 0:
+        blog.scan_count = blog.scan_count + 1
+        await blog.update()
     admins = await User.findAll('admin = 1')
     admin = None
-    if not len(admins):
+    if len(admins):
         admin = admins[0]
     return {
         '__template__': 'blog.html',
@@ -303,6 +268,63 @@ def manager(request):
 API
 '''
 
+
+
+@post('/api/authenticate')
+async def authenticate(*, email, passwd):
+    if not email:
+        raise APIValueError('email', 'Invalid email.')
+    if not passwd:
+        raise APIValueError('passwd', 'Invalid password.')
+    users = await User.findAll('email=?', [email])
+    if len(users) == 0:
+        raise APIValueError('email', 'Email not exist.')
+    else:
+        logging.info('找到用户')
+    user = users[0]
+    # check passwd:
+    sha1 = hashlib.sha1()
+    sha1.update(user.id.encode('utf-8'))
+    sha1.update(b':')
+    sha1.update(passwd.encode('utf-8'))
+    if user.passwd != sha1.hexdigest():
+        raise APIValueError('passwd', 'Invalid password.')
+    # authenticate ok, set cookie:
+    r = web.Response()
+    r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
+    logging.info('设置cookie成功')
+    user.passwd = '******'
+    r.content_type = 'application/json'
+    r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
+    return r
+
+
+# 注册
+@post('/api/users')
+async def api_register_user(*, email, name, passwd):
+    if not name or not name.strip():
+        raise APIValueError('name')
+    if not email or not _RE_EMAIL.match(email):
+        raise APIValueError('email')
+    if not passwd or not _RE_SHA1.match(passwd):
+        raise APIValueError('passwd')
+    logging.info('注册~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    users = await User.findAll('email=?', [email])
+    if len(users) > 0:
+        raise APIError('register:failed', 'email', 'Email is already in use.')
+    uid = next_id()
+    sha1_passwd = '%s:%s' % (uid, passwd)
+    user = User(id=uid, name=name.strip(), email=email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), image='http://www.gravatar.com/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest())
+    await user.save()
+    # make session cookie:
+    r = web.Response()
+    r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
+    user.passwd = '******'
+    r.content_type = 'application/json'
+    r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
+    return r
+
+
 #翻页
 @get('/api/blogs')
 async  def get_api_blogs(*,page= '1'):
@@ -322,7 +344,7 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
         raise APIValueError('summary', 'summary cannot be empty.')
     if not blogcontent or not blogcontent.strip():
         raise APIValueError('content', 'content cannot be empty.')
-    blog = Blog(tag = '开发',user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
+    blog = Blog(tag=tags,user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
     await  blog.save()
     logging.info(blogcontent)
     return blog
@@ -330,7 +352,7 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
 
 #修改博客
 @post('/api/blogs/{id}')
-async def api_update_blog(id, request, *, name, summary, content):
+async def api_update_blog(id, request, *, name, summary, content,tags):
     check_admin(request)
     blog = await Blog.find(id)
     if not name or not name.strip():
@@ -342,7 +364,20 @@ async def api_update_blog(id, request, *, name, summary, content):
     blog.name = name.strip()
     blog.summary = summary.strip()
     blog.content = content.strip()
+    blog.tag = tags
     await blog.update()
+    tag_str_arr = tags.split()
+    for tag_str in tag_str_arr:
+        tag_arr = await Tag.findAll('tag=?',[tag_str])
+        if tag_arr:#数据库有此tag
+            has_tag = tag_arr[0]
+            blog_id_arr = has_tag.blog_ids.split('#')
+            if not blog.id in blog_id_arr:#该tag 和该条blog没关联过
+                has_tag.blog_ids = has_tag.blog_ids + '#' + blog.id
+                await has_tag.update()
+        else:#没有此tag  new一个
+            tag = Tag(tag = tag_str,blog_ids = ('#' + blog.id))
+            await tag.save()
     return blog
 
 def check_admin(request):
