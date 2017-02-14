@@ -80,23 +80,38 @@ async def  archives(*,page = '1'):
     }
 
 @get('/tags/{tag}')
-async def  tag_archives(*,page = '1',tag):
+async def tag_archives(*,page = '1',tag):
     page_index = get_page_index(page)
-    tags_arr = Tag.findAll('tag=?',[tag])
-    blogCount = await Blog.findNumber('count(id)')
-    page = PageManager(blogCount, page_index,page_base = 6)
-    blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+    t_tag = '#'+tag
+    tags_arr = await Tag.findAll('tag=?',[t_tag])
+    ids = tags_arr[0].blog_ids
+    id_arr = re.findall(r'#([0-9a-zA-Z]*)',ids)
+    sql = ''
+    length = len(id_arr)
+    i = 0
+    for id in id_arr:
+        oor = ""
+        if i < length - 1:
+            oor = "or "
+        sql += "id=" + "?" + " " + oor
+        i += 1
+
+    temp_blogs = await Blog.findAll(sql,id_arr)
+    sort_blogs = []
+    page = PageManager(len(temp_blogs), page_index,page_base = 6)
+    blogs = temp_blogs[page.offset:page.limit]
     admins = await User.findAll('admin = 1')
     admin = None
     if  len(admins):
         admin = admins[0]
     return {
         '__template__':'blog_list.html',
-        'blogCount': blogCount,
+        'blogCount': len(temp_blogs),
         'page_index': page_index,
         'page': page,
         'blogs': blogs,
-        'admin': admin
+        'admin': admin,
+        'tag':tags_arr[0]
     }
 @get('/tags')
 async def  tags(request):

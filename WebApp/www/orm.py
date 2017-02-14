@@ -44,7 +44,7 @@ async def select(sql,args,size = None):
 
 
 async def execute(sql,args,autucommit = True):
-    log(sql)
+    log(sql,args)
     async  with __pool.get() as conn:
         if not autucommit:
             await conn.begin
