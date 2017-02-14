@@ -21,6 +21,8 @@ from coroweb import add_routes, add_static
 from handlers import cookie2user, COOKIE_NAME
 from  Models import  User
 
+from apis import datetime_filter,month_day_timeFilter,standard_timeFilter,removeSub
+
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
     options = dict(
@@ -121,28 +123,7 @@ async def auth_factory(app, handler):
                         pass
                return( await handler(request))
   return auth
-def datetime_filter(t):
-    delta = int(time.time() - t)
-    if delta < 60:
-        return u'1分钟前'
-    if delta < 3600:
-        return u'%s分钟前' % (delta // 60)
-    if delta < 86400:
-        return u'%s小时前' % (delta // 3600)
-    if delta < 604800:
-        return u'%s天前' % (delta // 86400)
-    dt = datetime.fromtimestamp(t)
-    return u'%s年%s月%s日' % (dt.year, dt.month, dt.day)
-def month_day_timeFilter(timestamp):
-    timeArray = time.localtime(timestamp)
-    # %Y-%m-%d %H:%M:%S"
-    month_day_time = time.strftime("%m-%d", timeArray)
-    return  month_day_time
-def standard_timeFilter(timestamp):
-    timeArray = time.localtime(timestamp)
-    # %Y-%m-%d %H:%M:%S"
-    month_day_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
-    return  month_day_time
+
 
 
 async def init(loop):
@@ -151,7 +132,7 @@ async def init(loop):
         logger_factory,auth_factory,response_factory#三者是按顺序调用的
     ])
 
-    init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter, standard_time= standard_timeFilter))
+    init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter, standard_time= standard_timeFilter,removeSub = removeSub))
     add_routes(app, 'handlers')
     add_static(app)
     srv = await loop.create_server(app.make_handler(), '127.0.0.1',7000)

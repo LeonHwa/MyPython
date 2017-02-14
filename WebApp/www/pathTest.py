@@ -9,6 +9,5 @@ import  re
 # m = re.match(r'c','canjcjv')
 # print(m.group(0))
 
-s = '#dd   #nb   #fdg'
-# m = re.split(r'\ *',s)
-print(s.split())
+# s = 'i am the one'
+

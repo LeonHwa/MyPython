@@ -6,6 +6,7 @@
 {% block beforehead %}
 
 <link rel="stylesheet" href="../static/css/tags/tags.css">
+<script src="../static/js/tags/tag.js"></script>
 {% endblock %}
 
 
@@ -17,10 +18,15 @@
       <h5>共计{{tags|length}}个标签</h5>
   </div>
 
-
-{% for tag in tags%}
- <a>{{tag.tag}}</a>
+<div class="allTags">
+    {% for tag in tags%}
+ <a href="/tag/{{tag.tag|removeSub}}" class="tagName">{{tag.tag|removeSub}}</a>
 {% endfor %}
+</div>
 
 </div>
+
+<script>
+    init()
+</script>
 {% endblock %}

@@ -78,7 +78,27 @@ async def  archives(*,page = '1'):
         'blogs': blogs,
         'admin': admin
     }
-@get('/tag')
+
+@get('/tags/{tag}')
+async def  tag_archives(*,page = '1',tag):
+    page_index = get_page_index(page)
+    tags_arr = Tag.findAll('tag=?',[tag])
+    blogCount = await Blog.findNumber('count(id)')
+    page = PageManager(blogCount, page_index,page_base = 6)
+    blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+    admins = await User.findAll('admin = 1')
+    admin = None
+    if  len(admins):
+        admin = admins[0]
+    return {
+        '__template__':'blog_list.html',
+        'blogCount': blogCount,
+        'page_index': page_index,
+        'page': page,
+        'blogs': blogs,
+        'admin': admin
+    }
+@get('/tags')
 async def  tags(request):
     blogCount = await Blog.findNumber('count(id)')
     admins = await User.findAll('admin = 1')

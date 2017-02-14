@@ -16,3 +16,23 @@
     width: 100%;
     text-align: center;
 }
+
+
+.allTags{
+
+    padding: 60px;
+}
+.tagName{
+    color: #212121;
+    border-bottom: solid 1px #999999;
+    font-size: 24px;
+    margin-left: 20px;
+    padding-bottom: 6px;
+}
+.tagName:hover{
+    /*background-color: ;*/
+     color: #212121;
+    border-bottom: solid 1px #000;
+    background-color: transparent;
+
+}

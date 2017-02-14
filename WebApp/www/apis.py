@@ -7,7 +7,34 @@ __author__ = 'Michael Liao'
 JSON API definition.
 '''
 
-import json, logging, inspect, functools
+import json, logging, inspect, functools,time
+
+
+def datetime_filter(t):
+    delta = int(time.time() - t)
+    if delta < 60:
+        return u'1分钟前'
+    if delta < 3600:
+        return u'%s分钟前' % (delta // 60)
+    if delta < 86400:
+        return u'%s小时前' % (delta // 3600)
+    if delta < 604800:
+        return u'%s天前' % (delta // 86400)
+    dt = datetime.fromtimestamp(t)
+    return u'%s年%s月%s日' % (dt.year, dt.month, dt.day)
+def month_day_timeFilter(timestamp):
+    timeArray = time.localtime(timestamp)
+    # %Y-%m-%d %H:%M:%S"
+    month_day_time = time.strftime("%m-%d", timeArray)
+    return  month_day_time
+def standard_timeFilter(timestamp):
+    timeArray = time.localtime(timestamp)
+    # %Y-%m-%d %H:%M:%S"
+    month_day_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+    return  month_day_time
+
+def removeSub(tag):
+    return tag.replace('#', '')
 
 class PageManager(object):
     def __init__(self,blog_count,page_index = 1,page_base = 6):

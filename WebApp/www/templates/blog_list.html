@@ -57,7 +57,11 @@ $(function () {
      <div class="left-header-line">
       <div class="list-header-circle"></div>
      </div>
+     {% if tag %}
+     <h2>{{tag.tag}}<h4>标签</h4></h2>
+     {% else %}
      <span>好!目前共计 {{blogCount}} 篇日志。 继续努力。 </span>
+     {% endif %}
  </div>
 {% for blog in blogs %}
      <div class="list">
