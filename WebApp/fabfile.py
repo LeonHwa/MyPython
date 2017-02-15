@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'leon '
+__author__ = 'Michael Liao'
 
 '''
 Deployment toolkit.
@@ -14,7 +14,7 @@ from fabric.api import *
 
 env.user = 'leon'
 env.sudo_user = 'root'
-env.hosts = ['192.168.200.128']
+env.hosts = ['192.168.200.129']
 
 db_user = 'www-data'
 db_password = 'www-data'
@@ -48,7 +48,7 @@ def build():
     '''
     Build dist package.
     '''
-    includes = ['static', 'templates', 'transwarp','*.py']
+    includes = ['static', 'templates', 'transwarp', 'favicon.ico', '*.py']
     excludes = ['test', '.*', '*.pyc', '*.pyo']
     local('rm -f dist/%s' % _TAR_FILE)
     with lcd(os.path.join(_current_path(), 'www')):
