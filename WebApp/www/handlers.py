@@ -25,16 +25,24 @@ def get_page_index(page_str):
     if p < 1:
         p = 1
     return p
+
+async def getAdmin():
+    admins = await User.findAll('admin = 1')
+    admin = None
+    if len(admins):
+        admin = admins[0]
+    return  admin
+
+async  def getTagLen():
+    return await Tag.findNumber('count(id)')
 @get('/')
 async def index(*,page = '1'):
     page_index = get_page_index(page)
     blogCount = await Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
-    admins = await User.findAll('admin = 1')
-    admin = None
-    if  len(admins):
-      admin = admins[0]
+    admin = await getAdmin()
+    admin.tagLen = await getTagLen()
     # jinja2
     return {
         '__template__': 'blogs.html',
@@ -47,10 +55,8 @@ async def index(*,page = '1'):
 
 @get('/register')
 async def user_registers(request):
-    admins = await User.findAll('admin = 1')
-    admin = None
-    if len(admins):
-        admin = admins[0]
+    admin = await getAdmin()
+    admin.tagLen = await getTagLen()
     return {
         '__template__':'register.html',
         'admin': admin
@@ -66,17 +72,15 @@ async def  archives(*,page = '1'):
     blogCount = await Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index,page_base = 6)
     blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
-    admins = await User.findAll('admin = 1')
-    admin = None
-    if  len(admins):
-        admin = admins[0]
+    admin = await getAdmin()
+    admin.tagLen = await getTagLen()
     return {
         '__template__':'blog_list.html',
         'blogCount': blogCount,
         'page_index': page_index,
         'page': page,
         'blogs': blogs,
-        'admin': admin
+        'admin':admin
     }
 
 @get('/tags/{tag}')
@@ -86,45 +90,37 @@ async def tag_archives(*,page = '1',tag):
     tags_arr = await Tag.findAll('tag=?',[t_tag])
     ids = tags_arr[0].blog_ids
     id_arr = re.findall(r'#([0-9a-zA-Z]*)',ids)
-    sql = ''
     length = len(id_arr)
-    i = 0
-    for id in id_arr:
-        oor = ""
-        if i < length - 1:
-            oor = "or "
-        sql += "id=" + "?" + " " + oor
-        i += 1
-
+    base_sql = 'id=? '
+    base_arr = []
+    for i in range(length):
+         base_arr.append(base_sql)
+    sql = 'or '.join(base_arr)
     temp_blogs = await Blog.findAll(sql,id_arr)
     sort_blogs = []
     page = PageManager(len(temp_blogs), page_index,page_base = 6)
     blogs = temp_blogs[page.offset:page.limit]
-    admins = await User.findAll('admin = 1')
-    admin = None
-    if  len(admins):
-        admin = admins[0]
+    admin = await getAdmin()
+    admin.tagLen = await getTagLen()
     return {
         '__template__':'blog_list.html',
         'blogCount': len(temp_blogs),
         'page_index': page_index,
         'page': page,
         'blogs': blogs,
-        'admin': admin,
+        'admin':admin,
         'tag':tags_arr[0]
     }
 @get('/tags')
 async def  tags(request):
     blogCount = await Blog.findNumber('count(id)')
-    admins = await User.findAll('admin = 1')
-    admin = None
-    if len(admins):
-        admin = admins[0]
+    admin = await getAdmin()
     tags = await  Tag.findAll()
+    admin.tagLen = len(tags)
     return {
         '__template__': 'tags.html',
         'blogCount': blogCount,
-        'admin': admin,
+        'admin':admin,
         'tags': tags,
     }
 
@@ -382,9 +378,24 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
     blog = Blog(tag=tags,user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
     await  blog.save()
     logging.info(blogcontent)
+    await addTag(blog,tags)
     return blog
 
-
+async  def  addTag(blog,tags):
+    tag_str_arr = tags.split()
+    for tag_str in tag_str_arr:
+        if not tag_str.startswith('#'):
+            continue
+        tag_arr = await Tag.findAll('tag=?', [tag_str])
+        if tag_arr:  # 数据库有此tag
+            has_tag = tag_arr[0]
+            blog_id_arr = has_tag.blog_ids.split('#')
+            if not blog.id in blog_id_arr:  # 该tag 和该条blog没关联过
+                has_tag.blog_ids = has_tag.blog_ids + '#' + blog.id
+                await has_tag.update()
+        else:  # 没有此tag  new一个
+            tag = Tag(tag=tag_str, blog_ids=('#' + blog.id))
+            await tag.save()
 #修改博客
 @post('/api/blogs/{id}')
 async def api_update_blog(id, request, *, name, summary, content,tags):
@@ -401,18 +412,7 @@ async def api_update_blog(id, request, *, name, summary, content,tags):
     blog.content = content.strip()
     blog.tag = tags
     await blog.update()
-    tag_str_arr = tags.split()
-    for tag_str in tag_str_arr:
-        tag_arr = await Tag.findAll('tag=?',[tag_str])
-        if tag_arr:#数据库有此tag
-            has_tag = tag_arr[0]
-            blog_id_arr = has_tag.blog_ids.split('#')
-            if not blog.id in blog_id_arr:#该tag 和该条blog没关联过
-                has_tag.blog_ids = has_tag.blog_ids + '#' + blog.id
-                await has_tag.update()
-        else:#没有此tag  new一个
-            tag = Tag(tag = tag_str,blog_ids = ('#' + blog.id))
-            await tag.save()
+    await addTag(blog, tags)
     return blog
 
 def check_admin(request):

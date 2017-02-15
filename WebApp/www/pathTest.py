@@ -11,17 +11,24 @@ import  re
 
 # s = 'i am the one'
 
+
+
 s = '#gkjk68g#65464555559kmj5k5#hdjhk289vhklv5'
+
 arr = re.findall(r'#([0-9a-zA-Z]*)',s)
 print(arr)
 sql = ''
 len = len(arr)
 i = 0
-for id in arr:
-    oor = ""
-    if i < len - 1 :
-        oor = "or "
-    sql += "id = " + id +" "+ oor
-    i += 1
 
-print(sql)
+print(' or '.join(arr))
+# for id in arr:
+#     oor = ""
+#     if i < len - 1 :
+#         oor = "or "
+#     sql += "id = " + id +" "+ oor
+#     i += 1
+#
+# print(sql)
+
+
