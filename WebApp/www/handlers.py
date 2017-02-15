@@ -26,23 +26,28 @@ def get_page_index(page_str):
         p = 1
     return p
 
-async def getAdmin():
-    admins = await User.findAll('admin = 1')
+@asyncio.coroutine
+def getAdmin():
+    admins = yield from User.findAll('admin = 1')
     admin = None
     if len(admins):
         admin = admins[0]
     return  admin
 
-async  def getTagLen():
-    return await Tag.findNumber('count(id)')
+@asyncio.coroutine
+def getTagLen():
+    return  (yield from Tag.findNumber('count(id)'))
+
 @get('/')
-async def index(*,page = '1'):
+def index(*,page = '1'):
     page_index = get_page_index(page)
-    blogCount = await Blog.findNumber('count(id)')
+    blogCount = yield from Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
-    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
-    admin = await getAdmin()
-    admin.tagLen = await getTagLen()
+    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+    admin = None
+    admin = yield from getAdmin()
+    if admin:
+        admin.tagLen = yield from getTagLen()
     # jinja2
     return {
         '__template__': 'blogs.html',
@@ -54,9 +59,11 @@ async def index(*,page = '1'):
     }
 
 @get('/register')
-async def user_registers(request):
-    admin = await getAdmin()
-    admin.tagLen = await getTagLen()
+def user_registers(request):
+    admin = None
+    admin = yield from getAdmin()
+    if admin:
+      admin.tagLen = yield from getTagLen()
     return {
         '__template__':'register.html',
         'admin': admin
@@ -67,13 +74,15 @@ _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$'
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
 @get('/archives/')
-async def  archives(*,page = '1'):
+def  archives(*,page = '1'):
     page_index = get_page_index(page)
-    blogCount = await Blog.findNumber('count(id)')
+    blogCount = yield from Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index,page_base = 6)
-    blogs = await  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
-    admin = await getAdmin()
-    admin.tagLen = await getTagLen()
+    blogs = yield from  Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
+    admin = None
+    admin = yield from getAdmin()
+    if admin:
+        admin.tagLen = yield from getTagLen()
     return {
         '__template__':'blog_list.html',
         'blogCount': blogCount,
@@ -84,10 +93,10 @@ async def  archives(*,page = '1'):
     }
 
 @get('/tags/{tag}')
-async def tag_archives(*,page = '1',tag):
+def tag_archives(*,page = '1',tag):
     page_index = get_page_index(page)
     t_tag = '#'+tag
-    tags_arr = await Tag.findAll('tag=?',[t_tag])
+    tags_arr = yield from Tag.findAll('tag=?',[t_tag])
     ids = tags_arr[0].blog_ids
     id_arr = re.findall(r'#([0-9a-zA-Z]*)',ids)
     length = len(id_arr)
@@ -96,12 +105,14 @@ async def tag_archives(*,page = '1',tag):
     for i in range(length):
          base_arr.append(base_sql)
     sql = 'or '.join(base_arr)
-    temp_blogs = await Blog.findAll(sql,id_arr)
+    temp_blogs = yield from Blog.findAll(sql,id_arr)
     sort_blogs = []
     page = PageManager(len(temp_blogs), page_index,page_base = 6)
     blogs = temp_blogs[page.offset:page.limit]
-    admin = await getAdmin()
-    admin.tagLen = await getTagLen()
+    admin = None
+    admin = yield from getAdmin()
+    if admin:
+        admin.tagLen = yield from getTagLen()
     return {
         '__template__':'blog_list.html',
         'blogCount': len(temp_blogs),
@@ -112,10 +123,11 @@ async def tag_archives(*,page = '1',tag):
         'tag':tags_arr[0]
     }
 @get('/tags')
-async def  tags(request):
-    blogCount = await Blog.findNumber('count(id)')
-    admin = await getAdmin()
-    tags = await  Tag.findAll()
+def  tags(request):
+    blogCount = yield from Blog.findNumber('count(id)')
+    admin = None
+    admin = yield from getAdmin()
+    tags = yield from  Tag.findAll()
     admin.tagLen = len(tags)
     return {
         '__template__': 'tags.html',
@@ -139,8 +151,8 @@ def user2cookie(user,max_age):
     logging.info('cookie设置好了')
     return '-'.join(L)
 
-
-async def cookie2user(cookie_str):
+@asyncio.coroutine
+def cookie2user(cookie_str):
     '''
     Parse cookie and load user if cookie is valid.
     '''
@@ -153,7 +165,7 @@ async def cookie2user(cookie_str):
         uid, expires, sha1 = L
         if int(expires) < time.time():
             return None
-        user = await User.find(uid)
+        user = yield from User.find(uid)
         if user is None:
             return None
         s = '%s-%s-%s-%s' % (uid, user.passwd, expires, _COOKIE_KEY)
@@ -195,15 +207,17 @@ def manage_edit_blog(*, id):
 
 #可编辑博客列表
 @get('/manager/blogs')
-async def manage_blogs(*, page='1'):
+def manage_blogs(*, page='1'):
     page_index = get_page_index(page)
-    blogCount = await Blog.findNumber('count(id)')
+    blogCount = yield from Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
-    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
-    admins = await User.findAll('admin = 1')
+    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+    admins = yield from User.findAll('admin = 1')
     admin = None
     if len(admins):
         admin = admins[0]
+    if admin:
+        admin.tagLen = yield from getTagLen()
     return {
         '__template__': 'manage_blogs.html',
         'blogCount': blogCount,
@@ -213,20 +227,20 @@ async def manage_blogs(*, page='1'):
         'admin':admin
     }
 @get('/blog/{id}')
-async def get_detailBlog(request,*,id):
-    blog = await Blog.find(id)
-    blogCount = await Blog.findNumber('count(id)')
+def get_detailBlog(request,*,id):
+    blog = yield from Blog.find(id)
+    blogCount = yield from Blog.findNumber('count(id)')
     user = request.__user__
     if not user:
        blog.scan_count = blog.scan_count + 1
-       await blog.update()
+       yield from blog.update()
     elif user.admin == 0:
         blog.scan_count = blog.scan_count + 1
-        await blog.update()
-    admins = await User.findAll('admin = 1')
+        yield from blog.update()
     admin = None
-    if len(admins):
-        admin = admins[0]
+    admin = yield from getAdmin()
+    if admin:
+        admin.tagLen = yield from getTagLen()
     return {
         '__template__': 'blog.html',
         'blog': blog,
@@ -237,7 +251,7 @@ async def get_detailBlog(request,*,id):
 
 
 @post('/upload/blogs/imgae/')
-async  def upload_image(request):
+def upload_image(request):
     # data = await request.post()
     # image_data = data['upload']
     #
@@ -247,8 +261,8 @@ async  def upload_image(request):
     # logging.info(data)
     # logging.info(filename)
     # return web.Response(text='success:%s ' % filename)
-    reader = await request.multipart()
-    image_data = await reader.next()
+    reader = yield from request.multipart()
+    image_data = yield from reader.next()
     filename = image_data.filename
     size = 0
     upload_path = '/upload/blogs/imgae/'
@@ -256,7 +270,7 @@ async  def upload_image(request):
         os.makedirs(upload_path)
     with open(os.path.join(upload_path, filename), 'wb') as f:
         while True:
-            chunk = await image_data.read_chunk()  # 8192 bytes by default.
+            chunk = yield from image_data.read_chunk()  # 8192 bytes by default.
             if not chunk:
                 break
             size += len(chunk)
@@ -265,9 +279,9 @@ async  def upload_image(request):
     return web.Response(text='../upload/blogs/imgae/' + filename)
 
 @post('/upload/icon')
-async def upload_icon(request):
-    reader = await request.multipart()
-    image_data = await reader.next()
+def upload_icon(request):
+    reader = yield from request.multipart()
+    image_data = yield from reader.next()
     filename = image_data.filename
     logging.info(image_data)
     size = 0
@@ -276,15 +290,15 @@ async def upload_icon(request):
         os.makedirs(upload_path)
     with open(os.path.join(upload_path, filename), 'wb') as f:
         while True:
-            chunk = await image_data.read_chunk()  # 8192 bytes by default.
+            chunk = yield from image_data.read_chunk()  # 8192 bytes by default.
             if not chunk:
                 break
             size += len(chunk)
             f.write(chunk)
-    admins = await User.findAll('admin = 1')
+    admins = yield from User.findAll('admin = 1')
     admin = admins[0]
     admin.image = os.path.join('../upload/adminIcon/', filename)
-    await  admin.update()
+    yield from  admin.update()
 @get('/manager')
 def manager(request):
     admin = None
@@ -302,12 +316,12 @@ API
 
 
 @post('/api/authenticate')
-async def authenticate(*, email, passwd):
+def authenticate(*, email, passwd):
     if not email:
         raise APIValueError('email', 'Invalid email.')
     if not passwd:
         raise APIValueError('passwd', 'Invalid password.')
-    users = await User.findAll('email=?', [email])
+    users = yield from User.findAll('email=?', [email])
     if len(users) == 0:
         raise APIValueError('email', 'Email not exist.')
     else:
@@ -332,7 +346,7 @@ async def authenticate(*, email, passwd):
 
 # 注册
 @post('/api/users')
-async def api_register_user(*, email, name, passwd):
+def api_register_user(*, email, name, passwd):
     if not name or not name.strip():
         raise APIValueError('name')
     if not email or not _RE_EMAIL.match(email):
@@ -340,13 +354,13 @@ async def api_register_user(*, email, name, passwd):
     if not passwd or not _RE_SHA1.match(passwd):
         raise APIValueError('passwd')
     logging.info('注册~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    users = await User.findAll('email=?', [email])
+    users = yield from User.findAll('email=?', [email])
     if len(users) > 0:
         raise APIError('register:failed', 'email', 'Email is already in use.')
     uid = next_id()
     sha1_passwd = '%s:%s' % (uid, passwd)
     user = User(id=uid, name=name.strip(), email=email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), image='http://www.gravatar.com/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest())
-    await user.save()
+    yield from user.save()
     # make session cookie:
     r = web.Response()
     r.set_cookie(COOKIE_NAME, user2cookie(user, 86400), max_age=86400, httponly=True)
@@ -358,16 +372,16 @@ async def api_register_user(*, email, name, passwd):
 
 #翻页
 @get('/api/blogs')
-async  def get_api_blogs(*,page= '1'):
+def get_api_blogs(*,page= '1'):
     page_index = get_page_index(page)
-    blogCount = await Blog.findNumber('count(id)')
+    blogCount = yield from Blog.findNumber('count(id)')
     page = PageManager(blogCount, page_index)
-    blogs = await Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
+    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(page.offset, page.limit))
     return  dict(blogs = blogs,page = page,page_index = page_index)
 
 #创建博客
 @post('/api/blogs')
-async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
+def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
     # check_admin(request)
     if not blogtitle or not blogtitle.strip():
         raise APIValueError('name', 'name cannot be empty.')
@@ -376,31 +390,32 @@ async def api_create_blog(request, *, blogtitle, blogsummary, blogcontent,tags):
     if not blogcontent or not blogcontent.strip():
         raise APIValueError('content', 'content cannot be empty.')
     blog = Blog(tag=tags,user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image, name=blogtitle.strip(), summary=blogsummary.strip(), content=blogcontent)
-    await  blog.save()
+    yield from  blog.save()
     logging.info(blogcontent)
-    await addTag(blog,tags)
+    yield from addTag(blog,tags)
     return blog
 
-async  def  addTag(blog,tags):
+@asyncio.coroutine
+def  addTag(blog,tags):
     tag_str_arr = tags.split()
     for tag_str in tag_str_arr:
         if not tag_str.startswith('#'):
             continue
-        tag_arr = await Tag.findAll('tag=?', [tag_str])
+        tag_arr = yield from Tag.findAll('tag=?', [tag_str])
         if tag_arr:  # 数据库有此tag
             has_tag = tag_arr[0]
             blog_id_arr = has_tag.blog_ids.split('#')
             if not blog.id in blog_id_arr:  # 该tag 和该条blog没关联过
                 has_tag.blog_ids = has_tag.blog_ids + '#' + blog.id
-                await has_tag.update()
+                yield from has_tag.update()
         else:  # 没有此tag  new一个
             tag = Tag(tag=tag_str, blog_ids=('#' + blog.id))
-            await tag.save()
+            yield from tag.save()
 #修改博客
 @post('/api/blogs/{id}')
-async def api_update_blog(id, request, *, name, summary, content,tags):
+def api_update_blog(id, request, *, name, summary, content,tags):
     check_admin(request)
-    blog = await Blog.find(id)
+    blog = yield from Blog.find(id)
     if not name or not name.strip():
         raise APIValueError('name', 'name cannot be empty.')
     if not summary or not summary.strip():
@@ -411,8 +426,8 @@ async def api_update_blog(id, request, *, name, summary, content,tags):
     blog.summary = summary.strip()
     blog.content = content.strip()
     blog.tag = tags
-    await blog.update()
-    await addTag(blog, tags)
+    yield from blog.update()
+    yield from addTag(blog, tags)
     return blog
 
 def check_admin(request):
@@ -428,21 +443,21 @@ def check_admin(request):
 #     return dict(blogs = blogs,page = page)
 
 @get('/api/blogs/{id}')
-async def get_blog(request,*,id):
-    blog = await Blog.find(id)
+def get_blog(request,*,id):
+    blog = yield from Blog.find(id)
     return dict(blog = blog)
 
 @post('/api/blogs/{id}/delete')
-async def api_delete_blog(request, *, id):
+def api_delete_blog(request, *, id):
     check_admin(request)
-    blog = await  Blog.find(id)
-    await blog.remove()
+    blog = yield from  Blog.find(id)
+    yield from blog.remove()
     return dict(id=id)
 
 
 @post('/manager/{id}')
-async def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescription,githubSite):
-     user = await User.find(id)
+def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescription,githubSite):
+     user = yield from User.find(id)
      if user:
        user.image = image
        user.blogName = blogName
@@ -450,5 +465,5 @@ async def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescrip
        user.ownName = ownName
        user.ownDescription = ownDescription
        user.githubSite = githubSite
-       await  user.update()
+       yield from  user.update()
 

@@ -43,34 +43,36 @@ def init_jinja2(app, **kw):
         for name, f in filters.items():
             env.filters[name] = f
     app['__templating__'] = env
-
-async def logger_factory(app, handler):
-    async def logger(request):
+@asyncio.coroutine
+def logger_factory(app, handler):
+     def logger(request):
         logging.info('调用~~~~~~~~~~~~~~~~~logger_factory')
         logging.info('Request: %s %s' % (request.method, request.path))
         # await asyncio.sleep(0.3)
-        return (await handler(request))
-    return logger
+        return (yield from handler(request))
+     return logger
 
-async def data_factory(app, handler):
-    async def parse_data(request):
+@asyncio.coroutine
+def data_factory(app, handler):
+   def parse_data(request):
         logging.info('调用~~~~~~~~~~~~~~~~~data_factory')
         if request.method == 'POST':
             if request.content_type.startswith('application/json'):
-                request.__data__ = await request.json()
+                request.__data__ = yield from request.json()
                 logging.info('request json: %s' % str(request.__data__))
             #     multipart/form-data  是上传图片的数据
             elif request.content_type.startswith('application/x-www-form-urlencoded')or request.content_type.startswith('multipart/form-data'):
-                request.__data__ = await request.post()
+                request.__data__ = yield from request.post()
                 logging.info('request form: %s' % str(request.__data__))
-        return (await handler(request))
-    return parse_data
+        return (yield from handler(request))
+        return parse_data
 
-async def response_factory(app, handler):
-    async def response(request):
+@asyncio.coroutine
+def response_factory(app, handler):
+    def response(request):
         logging.info('调用~~~~~~~~~~~~~~~~~response_factory')
         logging.info('Response handler...')
-        r = await handler(request)
+        r = yield from handler(request)
         if isinstance(r, web.StreamResponse):
             return r
         if isinstance(r, bytes):
@@ -107,27 +109,27 @@ async def response_factory(app, handler):
         return resp
     return response
 
-
-async def auth_factory(app, handler):
-  async def auth(request):
+@asyncio.coroutine
+def auth_factory(app, handler):
+  def auth(request):
                logging.info('check user: %s %s' % (request.method, request.path))
                request.__user__ = None
                cookie_str = request.cookies.get(COOKIE_NAME)
                if cookie_str:
-                   user = await cookie2user(cookie_str)
+                   user = yield from cookie2user(cookie_str)
                    if user:
                        logging.info('set current user: %s' % user.email)
                        request.__user__ = user
                if request.path.startswith('/manager') and (request.__user__ is None or not request.__user__.admin):
                         return web.HTTPFound('/signin')
                         pass
-               return( await handler(request))
+               return( yield from handler(request))
   return auth
 
 
-
-async def init(loop):
-    await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='www-data', password='www-data', db='awesome')
+@asyncio.coroutine
+def init(loop):
+    yield from orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='www-data', password='www-data', db='awesome')
     app = web.Application(loop=loop, middlewares=[
         logger_factory,auth_factory,response_factory#三者是按顺序调用的
     ])
@@ -135,8 +137,8 @@ async def init(loop):
     init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter, standard_time= standard_timeFilter,removeSub = removeSub))
     add_routes(app, 'handlers')
     add_static(app)
-    srv = await loop.create_server(app.make_handler(), '127.0.0.1',7000)
-    logging.info('server started at http://127.0.0.1:7000...')
+    srv = yield from loop.create_server(app.make_handler(), '127.0.0.1',8989)
+    logging.info('server started at http://127.0.0.1:8989...')
     return srv
 
 loop = asyncio.get_event_loop()
