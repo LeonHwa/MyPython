@@ -16,7 +16,7 @@ p{
 
 }
 a{
-  color: #a6a6a6;
+  color: #000;
   text-decoration: none;
 }
 a:focus {  outline:none;   -moz-outline:none;text-decoration: none;}
@@ -26,14 +26,13 @@ a:hover{
 }
 
 body{
-  /*background: #f5f7f9;*/
+
   text-decoration: none;
   /*font: 12px "宋体", "Arial Narrow", HELVETICA;*/
   font-family: Arial, Helvetica, sans-serif;
-  color: #3F3E3C;
   line-height: 1.5;
-  background: #444 url("../../static/images/bg4.jpg") repeat ;
-  background-size: contain;
+  background-color: #f5f7f9;
+  width: 100%;
 }
 .topLine{
     width: 100%;
@@ -231,19 +230,22 @@ article{
   text-align: center;
 }
 .blog-header .sumary p {
+    padding: 0 6px;
     display: inline-block;
     border-right: 1px solid #e2e2e2;
-    padding: 0 10px;
+    /*background-color: #00a8e6;*/
     font-size: 13px;
 }
 
+.sumary{
+ margin-top: 10px;
+}
 .blog-header .sumary :last-child {
     border-right: 0;
 }
 .title a { color: #454545;  }
 #blogName{
     margin: 0;
-    padding: 10px;
 }
 
 .blogContent{
@@ -302,18 +304,17 @@ article{
 	left: 0;
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-left: 10px solid #d8d7d2;
+	border-left: 10px solid #f5f7f9;
 }
 .sep .right-arrow {
 	right: 0;
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-right:10px solid #cecdc9;
+	border-right:10px solid #f5f7f9;
 }
 /******************Footer*********************/
 footer{
   text-align: center;
-  /*border-top:9px solid #000;*/
   padding-top: 10px;
   background: #000;
   width:100%;

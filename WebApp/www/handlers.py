@@ -125,10 +125,10 @@ def tag_archives(*,page = '1',tag):
 @get('/tags')
 def  tags(request):
     blogCount = yield from Blog.findNumber('count(id)')
-    admin = None
     admin = yield from getAdmin()
     tags = yield from  Tag.findAll()
-    admin.tagLen = len(tags)
+    if admin:
+        admin.tagLen = len(tags)
     return {
         '__template__': 'tags.html',
         'blogCount': blogCount,
@@ -265,7 +265,7 @@ def upload_image(request):
     image_data = yield from reader.next()
     filename = image_data.filename
     size = 0
-    upload_path = '/upload/blogs/imgae/'
+    upload_path = '/upload/blogs/image/'
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
     with open(os.path.join(upload_path, filename), 'wb') as f:
@@ -276,7 +276,7 @@ def upload_image(request):
             size += len(chunk)
             f.write(chunk)
 
-    return web.Response(text='../upload/blogs/imgae/' + filename)
+    return web.Response(text='../upload/blogs/image/' + filename)
 
 @post('/upload/icon')
 def upload_icon(request):

@@ -12,12 +12,13 @@ import os, re
 from datetime import datetime
 from fabric.api import *
 
-env.user = 'leon'
+env.user = 'root'
 env.sudo_user = 'root'
-env.hosts = ['192.168.123.128']
-
+env.hosts = ['198.35.45.182']
+env.port = '28033'
 db_user = 'www-data'
 db_password = 'www-data'
+env.password = '9XFbm4tADEjU'
 
 _TAR_FILE = 'dist-awesome.tar.gz'
 
