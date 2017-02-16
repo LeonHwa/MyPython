@@ -12,9 +12,9 @@
 <div class="header">
     <h2 id="title">{{blog.name}}</h2>
     <div class="sumary">
-        <p>发表于{{blog.created_at|datetime }}</p>
-        <p> <span class="ds-thread-count" data-thread-key={{blog.id}}></span></p>
-        <p>浏览次数 {{blog.scan_count}}</p>
+        <p><i class="icon-edit"></i> 发表于{{blog.created_at|datetime }}</p>
+        <p><i class="icon-comment-alt"></i>  <span class="ds-thread-count" data-thread-key={{blog.id}}></span></p>
+        <p><i class="icon-eye-open"></i> 浏览次数 {{blog.scan_count}}</p>
     </div>
 
 </div>

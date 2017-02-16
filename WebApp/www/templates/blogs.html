@@ -65,13 +65,13 @@
               <div class="blog-header">
                  <h2 id="blogName">{{blog.name}}</h2>
                  <div class="sumary">
-                    <p>发表于{{blog.created_at|datetime }}</p>
+                    <p><i class="icon-edit"></i> 发表于{{blog.created_at|datetime }}</p>
                     {% if comments %}
-                    <p> {{comments|length}}条评论</p>
+                    <p>{{comments|length}}条评论</p>
                     {% else %}
-                    <p>暂无评论</p>
+                    <p><i class="icon-comment-alt"> </i><span class="ds-thread-count" data-thread-key={{blog.id}}></span></p>
                     {%  endif %}
-                    <p>浏览次数 {{blog.scan_count}}</p>
+                    <p><i class="icon-eye-open"></i> 浏览次数 {{blog.scan_count}}</p>
                  </div>
               </div>
               <!--内容-->
@@ -81,7 +81,7 @@
                   <!--</ul>-->
               </div>
               <div class="textFoot">
-                  <a href="/blog/{{ blog.id }}">阅读全文 >></a>
+                  <a href="/blog/{{ blog.id }}">阅读全文 ></a>
               </div>
                   <!--尾巴-->
                <!--<div class="bottom-seperator"></div>-->
@@ -89,6 +89,7 @@
                             {% if not loop.last %}
                <div class="sep" style="margin: 0"><span class="left-arrow arrow"></span><span class="right-arrow arrow"></span></div>
                   {% endif %}
+
     {% endfor %}
 
 
@@ -99,4 +100,16 @@
   </ul>
 </nav>
 
+<!-- 多说js加载开始，一个页面只需要加载一次 -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yybbox"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+<!-- 多说js加载结束，一个页面只需要加载一次 -->
 {% endblock %}

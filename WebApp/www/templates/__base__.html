@@ -15,6 +15,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
 
     <link rel="stylesheet" href="../static/bootStrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/Font-Awesome/css/font-awesome.min.css">
     <script  src="../static/bootStrap/js/bootstrap.min.js"></script>
     <script src="../static/js/vue.min.js"></script>
 
@@ -35,14 +36,15 @@
                    <h1>{{admin.blogName|safe}}</h1>
                    <p>{{admin.blogDescription|safe}}</p>
                </section>
-               <div role="navigation" id="nav" class="nav-collapse">
+               <a class="toggle"><i  class="icon-reorder icon-2x"></i></a>
+               <div role="navigation" id="nav" class="nav-collapse nav-hidden">
                    <ul>
                        <li class="active"><a href="/"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp; 首页 </a></li>
                        <li><a href="/archives/"><span class="glyphicon glyphicon-briefcase"> </span>&nbsp;&nbsp;   归档</a></li>
                        <li><a href="/tags"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;   标签</a></li>
                    </ul>
                </div>
-             <div class="pinContainer">
+             <div class="pinContainer nav-hidden">
                 <div class="pin" style="background: white">
                    <div class="avatar">
                      <img class="avatarImg" src="{{admin.image}}">
@@ -63,11 +65,9 @@
                          <span><a href="/tags">{{admin.tagLen}}</a><span class="tag">标签</span></span>
                        </div>
                     </section>
-                    <div class="githublink">
-                       <a href="{{admin.githubSite|safe}}">Github</a>
-                    </div>
+                    <a href="{{admin.githubSite|safe}}"  class="githublink"><i class="icon-github"></i> Github</a>
                     <div class="outLink">
-                       <span class="glyphicon glyphicon-globe" style="margin-top: 10px"> Links</span>
+                       <span class="icon-globe" style="margin-top: 10px"> Links</span>
                        <ul>
                            <li><a href="http://blog.csdn.net/leixiaohua1020">LeiXiaoHua</a></li>
                            <li><a href="https://github.com/aymericdamien/TopDeepLearning">DeepLearning</a></li>

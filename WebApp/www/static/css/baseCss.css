@@ -44,12 +44,13 @@ body{
 .mainContent{
   width: 1000px;
   margin: 0 auto;
-  overflow: hidden;
 }
 .left-box{
-  float: left;
+  /*float: left;*/
   width: 240px;
   background-color: transparent;
+  display: inline-block;
+  vertical-align: top;
 }
 
 
@@ -64,6 +65,7 @@ aside{
   padding: 26px ;
   color: #fff;
   text-align: center;
+    width: 240px;
 }
 .topspaceinfo h1{
   font-size: 16px;
@@ -71,6 +73,9 @@ aside{
 }
 .nav-collapse {
     background-color: #FFF;
+}
+.toggle{
+    display: none;
 }
 .nav-collapse ul{
   padding-bottom: 20px;
@@ -143,6 +148,7 @@ aside section { display: block; overflow: hidden }
 .blogerInfo{
   padding-left: 30px;
   margin-top: 20px;
+  padding-bottom: 24px;
 }
 section div{
   padding: 0;
@@ -161,37 +167,22 @@ section div span a{
   color: #000;
   font-size: 18px;
 }
-.tag{
-  color: #666666;
-}
-
-.taglist ul{
-  padding: 20px  30px;
-}
-.taglist ul li a{
-  margin-right: 5px; color: #454545;
-  display: inline-block;
-  float: left;
-  padding: 2px 5px;
-}
 
 .githublink{
-  margin: 20px 20px 0 12px;
+  margin: 60px 0 20px 20px;
+  font-size: 16px;
+  padding: 4px 20px 4px  4px;
 }
-.githublink a{
 
-  background: url("../images/github.jpg") no-repeat 4% 40%;
-  padding: 3px  20px  0 30px;
-  /*background-color: red;*/
-}
 
 .outLink{
   border-top: 1px dashed #e2e2e2;
-  margin-left: 20px;
-  margin-right: 0;
-  padding-bottom: 8px;
+  padding: 10px 0 8px 0;
+  margin: 10px 0 0 20px;
 }
-
+.outLink span{
+    font-size: 16px;
+}
 .outLink ul li{
     margin: 8px 8px 0 0;
     display: inline-block;
@@ -208,16 +199,10 @@ section div span a{
 
 
 .right-box{
-  float: right;
-  width: 740px;
-  /*background-color: #FFFFB6;*/
-  padding: 0;
-    margin: 0;
-      /*border-top-left-radius: 12px;*/
-  /*border-bottom-left-radius: 12px;*/
-  /*border-top-right-radius: 12px;*/
-  /*border-bottom-right-radius: 12px;*/
-    overflow: hidden;
+   width: 740px;
+   display: inline-block;
+   padding-left: 16px;
+   margin: 0;
 }
 article{
     background-color: #FFF;
@@ -316,12 +301,63 @@ article{
 footer{
   text-align: center;
   padding-top: 10px;
-  background: #000;
-  width:100%;
+  background: #f5f7f9;
+  width: 100%;
   height: 120px;
 }
 
 footer div {
   text-align: center;
 
+}
+footer p{
+    color: #999999;
+}
+footer a{
+    color: #555555;
+    text-decoration: underline;
+}
+@media screen and (max-width: 1000px) {
+    body {
+    }
+
+    /*左侧隐藏的部分*/
+    aside {
+        width: 100%;
+        /*height: 0;*/
+        display: block;
+    }
+    .left-box{
+        width: 100%;
+        display: block;
+    }
+    .nav-hidden{
+        width: 0;
+        overflow: hidden;
+        height: 0;
+    }
+    /*左侧隐藏的部分*/
+    .topspaceinfo{
+        display: block;
+        width: 100%;
+        padding: 0;
+    }
+    .toggle{
+        display: block;
+    }
+    .mainContent{
+        width: 100%;
+    }
+    .right-box{
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+
+    footer{
+        display: block;
+         /*position: inherit;*/
+        width: 100%;
+    }
 }
