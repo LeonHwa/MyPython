@@ -6,8 +6,15 @@
  <link rel="stylesheet" href="../static/css/archives/archive.css">
 <script src="../static/js/archives/archive.js"></script>
 <script>
+
 $(function () {
-      init();
+       $('.nav-collapse ul li').each(function () {
+          $(this).removeClass('active');
+          $('.circle').remove();
+      });
+      $('#nav ul li').eq(1).addClass("active");
+      $('.normal-circle').eq(1).addClass("select-circle");
+
       var page_count = {{page.page_count}};
       var current_page = {{page.current_page}};
       addPage(page_count,current_page);
@@ -49,6 +56,7 @@ $(function () {
     $('#vm').show();
 }
 </script>
+
 {% endblock %}
 
 {% block content%}
@@ -82,4 +90,5 @@ $(function () {
     <li id="next" v-bind:class="{ disabled: has_next}"  v-on:click="next_page"><span>&raquo;</span></li>
   </ul>
 </nav>
+
 {% endblock %}

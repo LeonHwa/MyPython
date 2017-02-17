@@ -33,15 +33,18 @@
        <div class="left-box">
            <aside >
                <section class="topspaceinfo">
-                   <h1>{{admin.blogName|safe}}</h1>
+                   <div>
+                       <h1>{{admin.blogName|safe}}</h1>
+                       <a class="toggle"><i class="icon-reorder icon-2x"></i></a>
+                   </div>
                    <p>{{admin.blogDescription|safe}}</p>
                </section>
-               <a class="toggle"><i  class="icon-reorder icon-2x"></i></a>
-               <div role="navigation" id="nav" class="nav-collapse nav-hidden">
+
+               <div role="navigation" id="nav" class="nav-collapse">
                    <ul>
-                       <li class="active"><a href="/"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp; 首页 </a></li>
-                       <li><a href="/archives/"><span class="glyphicon glyphicon-briefcase"> </span>&nbsp;&nbsp;   归档</a></li>
-                       <li><a href="/tags"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;   标签</a></li>
+                       <li class="active"><a href="/"><span class="icon-home"></span>&nbsp;&nbsp;&nbsp;首页<span class="normal-circle"></span></a></li>
+                       <li><a href="/archives/"><span class="icon-archive"> </span>&nbsp;&nbsp;归档<span class="normal-circle"></span></a></li>
+                       <li><a href="/tags" ><span class="icon-tags"></span>&nbsp;&nbsp;标签<span class="normal-circle"></span></a></li>
                    </ul>
                </div>
              <div class="pinContainer nav-hidden">

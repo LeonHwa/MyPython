@@ -9,6 +9,8 @@
  <link rel="stylesheet" href="../static/css/home/home.css">
 
 <script>
+
+
     function initVM(data) {
     vm = new Vue({
         el: '#vm',
@@ -34,6 +36,13 @@
 
 
     $(function () {
+
+           $('.nav-collapse ul li').each(function () {
+          $(this).removeClass('active');
+          $('.circle').remove();
+      });
+    $('#nav ul li').eq(0).addClass("active");
+    $('.normal-circle').eq(0).addClass("select-circle");
        var pre_disable = true;
             next_disable = true;
             if ({{page.has_pre}}) {
