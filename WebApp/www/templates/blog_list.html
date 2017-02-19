@@ -60,25 +60,27 @@ $(function () {
 {% endblock %}
 
 {% block content%}
- <div class="list-content">
- <div class="list-header">
-     <div class="left-header-line">
-      <div class="list-header-circle"></div>
+ <div class="archives-list-content">
+    <div class="list">
+    <div class="archives-title-container">
+
+        {% if tag %}
+           <li class="archives-title"><span style="font-size: 18px"><strong style="color: #555555;font-size: 24px;">{{tag.tag|removeSub}}</strong>&nbsp;标签</span></li>
+        {% else %}
+           <li class="archives-title">
+               <span>好!目前共计 {{blogCount}} 篇日志。 继续努力。</span>
+           </li>
+        {% endif %}
      </div>
-     {% if tag %}
-     <span >{{tag.tag|removeSub}}标签</span>
-     {% else %}
-     <span>好!目前共计 {{blogCount}} 篇日志。 继续努力。 </span>
-     {% endif %}
- </div>
+     </div>
 {% for blog in blogs %}
      <div class="list">
-       <div class="left-line">
-           <div class="list-circle"></div>
-       </div>
+
        <div class="right-title">
-         <p class="month-day">{{blog.created_at|month_day}}</p>
-         <a href="/blog/{{ blog.id }}">{{blog.name}}</a>
+         <li class="archive">
+            <p class="month-day">{{blog.created_at|month_day}}</p>
+            <a href="/blog/{{ blog.id }}">{{blog.name}}</a>
+         </li>
        </div>
 
    </div>

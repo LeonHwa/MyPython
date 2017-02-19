@@ -13,7 +13,9 @@
     <script src="../static/js/awesome.js"></script>
     <script>
      var   ID = '{{admin.id}}';
-
+  $(".upload-icon-btn").click(function () {
+      alert("ccc")
+  });
      $(function () {
          var vm = new  Vue({
           el:'#vm',
@@ -23,6 +25,7 @@
             ownName :'{{admin.ownName}}',
             ownDescription :'{{admin.ownDescription}}',
             githubSite :'{{admin.githubSite}}'
+//            icon:'{{admin.image}}'
           },
            methods:{
                submit:function (event) {
@@ -61,13 +64,12 @@
    <div class="row">
        <div class="myInfo col-sm-6 col-sm-offset-3">
            <div class="avatar ">
-            <a href="#"></a>
+            <img href="#" src="{{admin.image}}">
+           </div>
             <form id="upload-form" action="/upload/icon" method="post" enctype="multipart/form-data">
              <input type="file" id="upload" name="upload" value="选择头像">
-             <input type="submit" value="上传" />
+             <input class="upload-icon-btn" type="submit" value="上传" />
             </form>
-            <iframe id="id_iframe" name="id_iframe" style="display:none;"></iframe>
-          </div>
           <form id="vm" role="form"  method="post">
           <div class="form-group">
              <label for="blogName">博客名称</label>

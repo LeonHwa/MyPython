@@ -3,7 +3,9 @@
 
 }
 
-
+.sumary p{
+    color: #999999;
+}
 
 .pagination li{
     background: #000;

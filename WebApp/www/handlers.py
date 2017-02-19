@@ -5,7 +5,7 @@ __author__ = 'Leon Hwa'
 
 ' url handlers '
 
-import re, time, json, logging, hashlib, base64, asyncio
+import re, time, json, logging, hashlib, base64, asyncio,uuid
 from aiohttp import web
 from coroweb import get, post
 
@@ -58,7 +58,7 @@ def index(*,page = '1'):
          'admin':admin
     }
 
-@get('/register')
+@get('/leonhwa/register')
 def user_registers(request):
     admin = None
     admin = yield from getAdmin()
@@ -250,7 +250,7 @@ def get_detailBlog(request,*,id):
 
 
 
-@post('/upload/blogs/imgae/')
+@post('/upload/blogs/image/')
 def upload_image(request):
     # data = await request.post()
     # image_data = data['upload']
@@ -264,6 +264,8 @@ def upload_image(request):
     reader = yield from request.multipart()
     image_data = yield from reader.next()
     filename = image_data.filename
+    extention = os.path.splitext(filename)[1]
+    filename = img_name(extention)
     size = 0
     upload_path = '/upload/blogs/image/'
     if not os.path.exists(upload_path):
@@ -283,9 +285,11 @@ def upload_icon(request):
     reader = yield from request.multipart()
     image_data = yield from reader.next()
     filename = image_data.filename
+    extention = os.path.splitext(filename)[1]
+    filename = img_name(extention)
     logging.info(image_data)
     size = 0
-    upload_path = '/upload/adminIcon/'
+    upload_path = '/upload/my/icon/'
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
     with open(os.path.join(upload_path, filename), 'wb') as f:
@@ -297,16 +301,29 @@ def upload_icon(request):
             f.write(chunk)
     admins = yield from User.findAll('admin = 1')
     admin = admins[0]
-    admin.image = os.path.join('../upload/adminIcon/', filename)
+    admin.image = os.path.join('../upload/my/icon/', filename)
     yield from  admin.update()
 @get('/manager')
 def manager(request):
     admin = None
     if request.__user__.admin:
         admin = request.__user__
+    logging.info("begin~~~~~~~")
+    logging.info(admin)
     return {
         '__template__': 'manage.html',
         'admin' : admin
+    }
+
+@get('/404')
+def notfound_404():
+    return {
+        '__template__': '404.html'
+    }
+@get('/500')
+def notfound_505():
+    return {
+        '__template__': '500.html'
     }
 # ######################################################------API--------#####################################################
 '''
@@ -459,7 +476,7 @@ def api_delete_blog(request, *, id):
 def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescription,githubSite):
      user = yield from User.find(id)
      if user:
-       user.image = image
+       # user.image = image
        user.blogName = blogName
        user.blogDescription = blogDescription
        user.ownName = ownName
@@ -467,3 +484,6 @@ def saveManagerInfo(id,*,image,blogName,blogDescription,ownName,ownDescription,g
        user.githubSite = githubSite
        yield from  user.update()
 
+
+def img_name(extention):
+    return '%015d%s%s' %(int(time.time()) * 1000,uuid.uuid4().hex,extention)

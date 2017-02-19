@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import  re
+# import  re
 # w = 'foolsdFoolsnbiFoo3'
 # ans = re.findall('(?i)(foo.)',w)
 # print(ans)
@@ -12,16 +12,16 @@ import  re
 # s = 'i am the one'
 
 
-
-s = '#gkjk68g#65464555559kmj5k5#hdjhk289vhklv5'
-
-arr = re.findall(r'#([0-9a-zA-Z]*)',s)
-print(arr)
-sql = ''
-len = len(arr)
-i = 0
-
-print(' or '.join(arr))
+#
+# s = '#gkjk68g#65464555559kmj5k5#hdjhk289vhklv5'
+#
+# arr = re.findall(r'#([0-9a-zA-Z]*)',s)
+# print(arr)
+# sql = ''
+# len = len(arr)
+# i = 0
+#
+# print(' or '.join(arr))
 # for id in arr:
 #     oor = ""
 #     if i < len - 1 :
@@ -30,5 +30,6 @@ print(' or '.join(arr))
 #     i += 1
 #
 # print(sql)
-
+import  os
+print(os.path.abspath('.'))
 

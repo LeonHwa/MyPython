@@ -4,6 +4,7 @@ body {
     color: #888;
     line-height: 30px;
     text-align: center;
+    background: #444 url("../../static/images/bg4.jpg") repeat ;
 }
 
 strong {
@@ -25,7 +26,8 @@ h1 {
 .top-content .description {
     margin: 20px 0 10px  0;
     opacity: 0.8;
-    color: #fff;
+    color: #000;
+    font-size: 28px;
 }
 .form-box{
     margin-top: 35px;
@@ -33,7 +35,7 @@ h1 {
 .form-top{
     overflow: hidden;
     text-align: left;
-    background-color: #fff;
+    background-color: #c1e2b3;
     border-radius: 4px 4px 0 0;
     padding: 0 25px 15px 25px;
 }
@@ -46,7 +48,7 @@ h1 {
     width: 25%;
 }
 .form-bottom{
-    background-color: #eee;
+    background-color: #fff;
     padding: 25px 25px  25px  25px;
 }
 .form-bottom form textarea {
@@ -78,7 +80,7 @@ button.btn {
     margin: 0;
     vertical-align: middle;
     font-size:16px;
-    background-color: #de995e;
+    background-color: #4dde71;
 }
 
 button.btn :hover {

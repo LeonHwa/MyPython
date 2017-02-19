@@ -30,7 +30,7 @@ body{
 
   text-decoration: none;
   /*font: 12px "宋体", "Arial Narrow", HELVETICA;*/
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Palatino";
   line-height: 1.5;
   background-color: #f5f7f9;
   width: 100%;
@@ -74,15 +74,18 @@ aside{
     /*background: #245269;*/
     border-right: none;
 }
+
 .topspaceinfo div h1{
-  font-size: 20px;
+      font-family: "Brush Script MT", Tahoma, Sans-Serif;
+  font-size: 28px;
   /*line-height: 20px;!*间距?*!*/
   display: inline-block;
-
 }
 .topspaceinfo p{
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    font-family: "Papyrus";
+    color: #cbcbcb;
+    font-size: 15px;
 }
 
 .nav-collapse {
@@ -194,8 +197,11 @@ section div span a{
 
 .githublink{
   margin: 60px 0 20px 20px;
-  font-size: 16px;
+  font-size: 14px;
   padding: 4px 20px 4px  4px;
+  font-family: "Palatino";
+  -webkit-transition: margin-left 2s ease-in-out; /* For Safari 3.1 to 6.0 */
+  transition: margin-left 2s ease-in-out;
 }
 
 
@@ -203,6 +209,7 @@ section div span a{
   border-top: 1px dashed #e2e2e2;
   padding: 10px 0 8px 0;
   margin: 10px 0 0 20px;
+
 }
 .outLink span{
     font-size: 16px;
@@ -216,8 +223,9 @@ section div span a{
 }
 .outLink ul li a{
     color: #0f0f0f;
-   border-bottom: 1px solid #000;
+     border-bottom: 1px solid #000;
     padding-bottom: 2px;
+    font-size: 12px;
 }
 /************************************************content**************************************************/
 
@@ -248,6 +256,7 @@ article{
 
 .sumary{
  margin-top: 10px;
+
 }
 .blog-header .sumary :last-child {
     border-right: 0;
@@ -346,7 +355,9 @@ footer a{
 @media screen and (max-width: 1000px) {
     body {
     }
-
+    .topLine{
+        display: none;
+    }
     /*左侧隐藏的部分*/
     aside {
         width: 100%;
@@ -360,11 +371,14 @@ footer a{
     .nav-hidden{
         width: 0;
         overflow: hidden;
+        display: none;
         height: 0;
     }
     .nav-collapse{
         display: none;
         width: 100%;
+        padding: 0;
+        margin: 0;
     }
     /*左侧隐藏的部分*/
 
@@ -373,7 +387,7 @@ footer a{
         display: block;
         width: 100%;
         padding: 0;
-
+        margin: 0;
     }
     .topspaceinfo div h1{
         margin-left: 60px;

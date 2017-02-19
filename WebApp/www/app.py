@@ -14,7 +14,6 @@ from datetime import datetime
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
-
 import orm
 from coroweb import add_routes, add_static
 
@@ -71,8 +70,15 @@ def data_factory(app, handler):
 def response_factory(app, handler):
     def response(request):
         logging.info('调用~~~~~~~~~~~~~~~~~response_factory')
-        logging.info('Response handler...')
+        status = getattr(request.match_info.route, "status", None)
+        if status == 404:
+            return  web.HTTPFound('/404')
+        elif status == 500:
+            return web.HTTPFound('/500')
         r = yield from handler(request)
+        logging.info('~~~~~~~~~~~~~~~~~~~~')
+        logging.info(r)
+        logging.info('~~~~~~~~~~~~~~~~~~~~')
         if isinstance(r, web.StreamResponse):
             return r
         if isinstance(r, bytes):
@@ -127,12 +133,14 @@ def auth_factory(app, handler):
   return auth
 
 
+
 @asyncio.coroutine
 def init(loop):
     yield from orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='www-data', password='www-data', db='awesome')
     app = web.Application(loop=loop, middlewares=[
         logger_factory,auth_factory,response_factory#三者是按顺序调用的
     ])
+
 
     init_jinja2(app, filters=dict(datetime=datetime_filter,month_day = month_day_timeFilter, standard_time= standard_timeFilter,removeSub = removeSub))
     add_routes(app, 'handlers')

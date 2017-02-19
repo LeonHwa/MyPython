@@ -6,7 +6,7 @@
     <title>{% block title %} ? {% endblock %}</title>
     <!--<meta name="viewport" content="width=device-width,initial-scale=1">-->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-      <link rel="shortcut icon" href="../favicon.jpeg" >
+      <link rel="shortcut icon" href="../favicon.ico" >
     <script  src="../static/js/jquery.min.js"></script>
 
       <!--高亮-->
@@ -50,7 +50,7 @@
              <div class="pinContainer nav-hidden">
                 <div class="pin" style="background: white">
                    <div class="avatar">
-                     <img class="avatarImg" src="{{admin.image}}">
+                     <img class="avatarImg img-thumbnail" src="{{admin.image}}">
                    </div>
 
                     <div class="userInfo">
@@ -70,7 +70,7 @@
                     </section>
                     <a href="{{admin.githubSite|safe}}"  class="githublink"><i class="icon-github"></i> Github</a>
                     <div class="outLink">
-                       <span class="icon-globe" style="margin-top: 10px"> Links</span>
+                       <span class="icon-globe" style="margin-top: 10px"><strong>&nbsp;Links</strong></span>
                        <ul>
                            <li><a href="http://blog.csdn.net/leixiaohua1020">LeiXiaoHua</a></li>
                            <li><a href="https://github.com/aymericdamien/TopDeepLearning">DeepLearning</a></li>
@@ -97,5 +97,10 @@
       </div>
    </footer>
 </body>
+<script>
+//    $(".topspaceinfo div h1").fadeIn("slow");
+//            $(".topspaceinfo div h1").animate({ opacity: '0'}, "slow");
+//            $(".topspaceinfo div h1").animate({ opacity: '1'}, "slow");
 
+</script>
 </html>

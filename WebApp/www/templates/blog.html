@@ -21,10 +21,13 @@
 
 <div class="blog_detail_content" >
      {{blog.content|safe}}
+     {% if blog.tag%}
+        <div id="tagcontainer" >
+           <a href="/tags/{{blog.tag|removeSub}}" class="blogTag">{{blog.tag}}</a>
+        </div>
+     {%  endif %}
 </div>
-
-
-
+<hr />
 <!-- 多说评论框 start -->
 	<div class="ds-thread" data-category="ios" data-thread-key= {{blog.id}} data-title= {{blog.name}} data-author-key= {{blog.user_id}} data-limit = 12 style="padding: 0 20px"></div>
 <!-- 多说评论框 end -->
@@ -39,6 +42,10 @@ var duoshuoQuery = {short_name:"yybbox"};
 		(document.getElementsByTagName('head')[0]
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 	})();
+     $('.nav-collapse ul li').each(function () {
+          $(this).removeClass('active');
+          $('.circle').remove();
+      });
 	</script>
 <!-- 多说公共JS代码 end -->
 
